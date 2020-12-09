@@ -6,7 +6,7 @@
 #    By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/01 05:08:59 by sehpark           #+#    #+#              #
-#    Updated: 2020/12/10 04:40:36 by sehpark          ###   ########.fr        #
+#    Updated: 2020/12/10 05:35:10 by sehpark          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ AR		= ar rcs
 MLXFLAGS= -lm -lXext -lX11 -lbsd
 
 INCS	= -I ./includes/
-INCS_MLX= -I ./minilibx_linux/
+INCS_MLX= -I ./minilibx-linux/
 
 SRC		= ./srcs/
 
@@ -39,7 +39,7 @@ OBJS_B	= $(addprefix $(SRC), $(SRCS_B:.c=.o))
 #----------------------------------- FILES ------------------------------------#
 
 LFT		= libft/libft.a
-LMLX	= minilibx_linux/libmlx.a
+LMLX	= minilibx-linux/libmlx.a
 
 CONVERT	= convert/
 SRCS	= 
@@ -54,7 +54,7 @@ $(LFT):
 	@$(MAKE) -s -C libft
 
 $(LMLX):
-	@$(MAKE) -s -C minilibx_linux
+	@$(MAKE) -s -C minilibx-linux
 
 .c.o:
 	$(CC) $(CFLAGS) $(INCS) $(INCS_MLX) -c $< -o $(<:.c=.o)
@@ -65,12 +65,12 @@ bonus: $(NAME)
 
 clean:
 	@$(MAKE) -sC libft clean
-	@$(MAKE) -sC minilibx_linux clean
+	@$(MAKE) -sC minilibx-linux clean
 	@rm -f $(OBJS) $(OBJS_B)
 
 fclean: 
 	@$(MAKE) -sC libft fclean
-	@$(MAKE) -sC minilibx_linux clean
+	@$(MAKE) -sC minilibx-linux clean
 	@rm -f $(OBJS) $(OBJS_B)
 	@rm -f $(NAME)
 
