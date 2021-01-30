@@ -6,7 +6,7 @@
 #    By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/01 05:08:59 by sehpark           #+#    #+#              #
-#    Updated: 2020/12/10 05:35:10 by sehpark          ###   ########.fr        #
+#    Updated: 2021/01/30 06:26:55 by sehpark          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,14 +41,44 @@ OBJS_B	= $(addprefix $(SRC), $(SRCS_B:.c=.o))
 LFT		= libft/libft.a
 LMLX	= minilibx-linux/libmlx.a
 
-CONVERT	= convert/
-SRCS	= 
+SRCS	= lec.c \
+		  io/get_next_line.c \
+		  io/read_rt.c \
+		  io/output.c \
+		  io/rt/rt_ambientlight.c \
+		  io/rt/rt_camera.c \
+		  io/rt/rt_light.c \
+		  io/rt/rt_rect.c \
+		  io/rt/rt_resolution.c \
+		  io/rt/rt_sphere.c \
+		  io/rt/tools/atovec3.c \
+		  io/rt/tools/check_atof_parameter.c \
+		  io/rt/tools/check_atoi_parameter.c \
+		  io/rt/tools/next.c \
+		  vector/operations.c \
+		  viewport/viewport.c \
+		  viewport/ray.c \
+		  viewport/hit_record.c \
+		  object/object.c \
+		  object/sphere.c \
+		  object/rect.c \
+		  object/lambertian_scatter.c \
+		  object/metal_scatter.c \
+		  object/dielectric_scatter.c \
+		  image/image.c \
+		  image/image_render.c \
+		  tools/error_handle.c \
+		  tools/random_double.c \
+		  tools/clamp.c \
+		  tools/degrees_to_radians.c
+
+
 SRCS_B	=
 
 #----------------------------------- RULES ------------------------------------#
 
 $(NAME): $(LFT) $(LMLX) $(OBJS)
-		$(CC) -o $(NAME) main.c $(CFLAGS) $(MLXFLAGS) $(INCS) $(INCS_MLX) $(LMLX) $(LFT)
+	$(CC) -o $(NAME) $(OBJS) $(CFLAGS) $(MLXFLAGS) $(INCS) $(INCS_MLX) $(LMLX) $(LFT) -fsanitize=address
 	
 $(LFT):
 	@$(MAKE) -s -C libft

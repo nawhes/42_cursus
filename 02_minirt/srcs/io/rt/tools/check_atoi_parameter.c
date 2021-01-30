@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   check_atoi_parameter.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/10 03:43:25 by sehpark           #+#    #+#             */
-/*   Updated: 2020/12/10 04:19:47 by sehpark          ###   ########.fr       */
+/*   Created: 2021/01/30 04:42:03 by sehpark           #+#    #+#             */
+/*   Updated: 2021/01/30 21:21:02 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mlx.h"
+#include "libft.h"
 
-int main(void)
+int			check_atoi_parameter(char *param, int *i, int *target)
 {
-  void *mlx;
- // void *window;
-  
-  mlx = mlx_init();
-  mlx_new_window(mlx, 1000, 1000, "Title");
-  
-  mlx_loop(mlx);
-  return (0);
+	if (!ft_isdigit(*(param + *i)) && *(param + *i) != '-')
+		return (-1);
+	*target = ft_atoi(param + *i);
+	while (ft_isdigit(*(param + *i)))
+		(*i)++;
+	return (0);
 }
