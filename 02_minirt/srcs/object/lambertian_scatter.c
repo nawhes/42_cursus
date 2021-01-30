@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 03:44:34 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/11 04:17:56 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/01/31 05:46:32 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int			lambertian_scatter(t_ray *r_in, t_hit_record *rec, t_vec3 *attenuation, t_
 	scatter_direction = vec3_add(rec->normal, vec3_random_unit_vector());
 	if (vec3_near_zero(scatter_direction))
 		scatter_direction = rec->normal;
-	*scattered = ray_construct(rec->p, scatter_direction);
+	*scattered = ray(rec->p, scatter_direction);
 	*attenuation = rec->rgb;
 	return (1);
 }

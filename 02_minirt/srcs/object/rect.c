@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 22:20:39 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/22 06:24:28 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/01/31 06:05:01 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,17 +79,17 @@ int			rect_hit(t_object ob, t_ray *r, t_hit_record *rec)
 	return (1);
 }
 
-t_rect		*rect(double x0, double x1, double y0, double y1, double k, t_vec3 rgb)
+t_rect		*rect(t_rect this)
 {
 	t_rect		*node;
 
 	if (!(node = malloc(sizeof(t_rect))))
 		return (NULL);
-	node->x0 = x0;
-	node->x1 = x1;
-	node->y0 = y0;
-	node->y1 = y1;
-	node->k = k;
-	node->rgb = rgb;
+	node->x0 = this.x0;
+	node->x1 = this.x1;
+	node->y0 = this.y0;
+	node->y1 = this.y1;
+	node->k = this.k;
+	node->rgb = this.rgb;
 	return (node);
 }

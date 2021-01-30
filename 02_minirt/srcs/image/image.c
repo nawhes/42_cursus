@@ -6,14 +6,14 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/29 23:08:45 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/24 22:57:10 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/01/31 04:19:34 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "struct.h"
 #include "image.h"
 
-t_image			*image_init(int width, int height)
+t_image			*image(int width, int height)
 {
 	t_image		*image;
 	int			i;

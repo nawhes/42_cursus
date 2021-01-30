@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/30 21:23:18 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/01/31 06:22:33 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,24 @@
 #include "image.h"
 #include "libft.h"
 
+static t_list	*image_node(int width, int height)
+{
+	t_image	*p_img;
+	t_list	*p_node;
+
+	if (!(p_img = image(width, height)))
+		return (NULL);
+	if (!(p_node = ft_lstnew((void *)p_img)))
+	{
+		free(p_img);
+		return (NULL);
+	}
+	return (p_node);
+}
+
 void		rt_resolution(t_minirt *rt)
 {
-	t_image	*p_image;
+	t_list	*p_node;
 	int		width;
 	int		height;
 	int		i;
@@ -37,6 +52,7 @@ void		rt_resolution(t_minirt *rt)
 		i++;
 	if (*(rt->line + i) != '\0')
 		error_handle(-2, rt);
-	p_image = image_init(width, height);
-	ft_lstadd_back(&(rt->p_image), ft_lstnew((void *)p_image));
+	if (!(p_node = image_node(width, height)))
+		error_handle(-3, rt);
+	ft_lstadd_back(&(rt->p_image), p_node);
 }

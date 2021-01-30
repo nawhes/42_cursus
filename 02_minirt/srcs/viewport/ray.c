@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 21:32:55 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/22 06:38:12 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/01/31 06:08:44 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "tools.h"
 #include "object.h"
 
-t_ray			ray_construct(t_vec3 orig, t_vec3 dir)
+t_ray			ray(t_vec3 orig, t_vec3 dir)
 {
 	t_ray		ret;
 
@@ -43,7 +43,7 @@ t_vec3		ray_color(t_ray r, t_list *lst, int depth)
 		return (vec3(0, 0, 0));
 
 	t_hit_record	rec;
-	hit_record_init(&rec);
+	rec = hit_record();
 
 	int		i;
 	int		handler;
@@ -73,7 +73,5 @@ t_vec3		ray_color(t_ray r, t_list *lst, int depth)
 	
 	unit_direction = vec3_unit_vector(r.dir);
 	t = 0.5 * (unit_direction.y + 1.0);
-	//t_vec3 start = vec3_mul(vec3(1.0, 1.0, 1.0), 1.0 - t);
-	//t_vec3 end = vec3_mul(vec3(0.5, 0.7, 1.0), t);
 	return (vec3(0.5, 0.5, 0.5));
 }

@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 21:28:27 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/24 22:49:39 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/01/31 05:29:06 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-# define	LAMBERTIAN	1
-# define	METAL		2
-# define	DIELECTRIC	3
+# define	LAMBERTIAN		1
+# define	METAL			2
+# define	DIELECTRIC		3
 # define	DIFFUSE_LIGHT	4
-# define	CHECK_BOX	5
+# define	CHECK_BOX		5
 
-# define	T_SPHERE		11
-# define	T_RECT		12
+# define	OB_SPHERE		11
+# define	OB_RECT			12
 
-# define	PI			3.1415926535897932385
+# define	PI				3.1415926535897932385
 # define	SAMPLE_PER_PIXEL	20
 # define	MAX_DEPTH			50
 
@@ -68,6 +68,10 @@ typedef struct		s_hit_record
 
 typedef struct		s_viewport
 {
+	t_vec3			lookfrom;
+	t_vec3			lookat;
+	double			vfov;
+	double			aspect_ratio;
 	t_vec3			origin;
 	t_vec3			horizontal;
 	t_vec3			vertical;
@@ -115,8 +119,6 @@ typedef struct		s_sphere
 	t_vec3			coord;
 	t_vec3			rgb;
 	double			diameter;
-//	int				(*hit)(struct s_sphere ob, t_ray *r, t_hit_record *rec);
-//	int				texture;
 }					t_sphere;
 
 typedef struct		s_rect
@@ -127,8 +129,6 @@ typedef struct		s_rect
 	double			y1;
 	double			k;
 	t_vec3			rgb;
-//	int				(*hit)(struct s_rect ob, t_ray *r, t_hit_record *rec);
-//	int				texture;
 }					t_rect;
 
 typedef struct		s_plane
@@ -167,6 +167,5 @@ typedef struct		s_minirt
 	t_list			*p_object;
 	t_list			*p_image;
 }					t_minirt;
-
 
 #endif

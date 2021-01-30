@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/16 00:23:55 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/21 02:08:35 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/01/31 05:46:19 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,6 @@ int			dielectric_scatter(t_ray *r_in, t_hit_record *rec, t_vec3 *attenuation, t_
 	else
 		direction = refract(unit_direction, rec->normal, refraction_ratio);
 
-	*scattered = ray_construct(rec->p, direction);
+	*scattered = ray(rec->p, direction);
 	return (1);
 }

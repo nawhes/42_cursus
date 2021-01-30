@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/29 20:54:08 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/22 06:10:17 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/01/31 05:52:58 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 
 t_object	*object(void *info, int type, int texture);
 
-t_sphere	*sphere(t_vec3 coord, double diameter, t_vec3 rgb);
+t_sphere	*sphere(t_sphere sp);
 int			sphere_hit(t_object ob, t_ray *r, t_hit_record *rec);
 
-t_rect		*rect(double x0, double x1, double y0, double y1, double k, t_vec3 rgb);
+t_rect		*rect(t_rect rectangle);
 int			rect_hit(t_object ob, t_ray *r, t_hit_record *rec);
 
 

@@ -6,7 +6,7 @@
 #    By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/01 05:08:59 by sehpark           #+#    #+#              #
-#    Updated: 2021/01/30 06:26:55 by sehpark          ###   ########.fr        #
+#    Updated: 2021/01/31 06:33:33 by sehpark          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ OBJS_B	= $(addprefix $(SRC), $(SRCS_B:.c=.o))
 LFT		= libft/libft.a
 LMLX	= minilibx-linux/libmlx.a
 
-SRCS	= lec.c \
+SRCS	= minirt.c \
 		  io/get_next_line.c \
 		  io/read_rt.c \
 		  io/output.c \

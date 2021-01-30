@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 22:20:39 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/22 06:42:33 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/01/31 06:05:21 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,14 +104,14 @@ int			sphere_hit(
 	return (1);
 }
 
-t_sphere	*sphere(t_vec3 coord, double diameter, t_vec3 rgb)
+t_sphere	*sphere(t_sphere this)
 {
 	t_sphere	*node;
 
 	if (!(node = malloc(sizeof(t_sphere))))
 		return (NULL);
-	node->coord = coord;
-	node->diameter = diameter;
-	node->rgb = rgb;
+	node->coord = this.coord;
+	node->diameter = this.diameter;
+	node->rgb = this.rgb;
 	return (node);
 }
