@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 21:28:27 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/31 05:29:06 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/12 03:40:03 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@
 # define	CHECK_BOX		5
 
 # define	OB_SPHERE		11
-# define	OB_RECT			12
+# define	OB_XYRECT		12
+# define	OB_YZRECT		13
+# define	OB_XZRECT		14
 
 # define	PI				3.1415926535897932385
 # define	SAMPLE_PER_PIXEL	20
-# define	MAX_DEPTH			50
+# define	MAX_DEPTH			20
 
 typedef	struct		s_vec3
 {
@@ -53,14 +55,21 @@ typedef struct		s_hit_record
 	double			u;
 	double			v;
 	double			ir;
-	t_vec3			rgb;
+	t_vec3			albedo;
 	int				front_face;
 	void			(*set_face_normal)
 		(struct s_hit_record *this, t_ray *r, t_vec3 *outward_normal);
 	int				(*scatter)
-		(t_ray *r_in, struct s_hit_record *rec, t_vec3 *attenuation, t_ray *scattered);
+		(t_ray *r_in, struct s_hit_record *rec, t_ray *scattered, double *pdf);
 	t_vec3			emitted;
 }					t_hit_record;
+
+typedef struct		s_scatter_record
+{
+	t_ray			specular_ray;
+	int				is_specular;
+	t_vec3			attenuation;
+}					t_scatter_record;
 
 /*
 **
@@ -121,7 +130,7 @@ typedef struct		s_sphere
 	double			diameter;
 }					t_sphere;
 
-typedef struct		s_rect
+typedef struct		s_xyrect
 {
 	double			x0;
 	double			x1;
@@ -129,7 +138,27 @@ typedef struct		s_rect
 	double			y1;
 	double			k;
 	t_vec3			rgb;
-}					t_rect;
+}					t_xyrect;
+
+typedef struct		s_xzrect
+{
+	double			x0;
+	double			x1;
+	double			z0;
+	double			z1;
+	double			k;
+	t_vec3			rgb;
+}					t_xzrect;
+
+typedef struct		s_yzrect
+{
+	double			y0;
+	double			y1;
+	double			z0;
+	double			z1;
+	double			k;
+	t_vec3			rgb;
+}					t_yzrect;
 
 typedef struct		s_plane
 {

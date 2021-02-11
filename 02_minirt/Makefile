@@ -6,7 +6,7 @@
 #    By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/01 05:08:59 by sehpark           #+#    #+#              #
-#    Updated: 2021/01/31 06:33:33 by sehpark          ###   ########.fr        #
+#    Updated: 2021/02/12 03:36:22 by sehpark          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,9 @@ SRCS	= minirt.c \
 		  io/rt/rt_ambientlight.c \
 		  io/rt/rt_camera.c \
 		  io/rt/rt_light.c \
-		  io/rt/rt_rect.c \
+		  io/rt/rt_xyrect.c \
+		  io/rt/rt_xzrect.c \
+		  io/rt/rt_yzrect.c \
 		  io/rt/rt_resolution.c \
 		  io/rt/rt_sphere.c \
 		  io/rt/tools/atovec3.c \
@@ -61,7 +63,10 @@ SRCS	= minirt.c \
 		  viewport/hit_record.c \
 		  object/object.c \
 		  object/sphere.c \
-		  object/rect.c \
+		  object/xyrect.c \
+		  object/xzrect.c \
+		  object/yzrect.c \
+		  object/set_record.c \
 		  object/lambertian_scatter.c \
 		  object/metal_scatter.c \
 		  object/dielectric_scatter.c \

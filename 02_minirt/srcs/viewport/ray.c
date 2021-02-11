@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 21:32:55 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/31 06:08:44 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/04 02:05:59 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,8 @@ t_vec3			ray_at(t_ray a, double t)
 	return (ret);
 }
 
-t_vec3		ray_color(t_ray r, t_list *lst, int depth)
+t_vec3		ray_color(t_ray r, t_minirt *rt, int depth)
 {
-	t_vec3	unit_direction;
-	double	t;
 	if (depth <= 0)
 		return (vec3(0, 0, 0));
 
@@ -51,7 +49,7 @@ t_vec3		ray_color(t_ray r, t_list *lst, int depth)
 	handler = 0;
 	i = 0;
 	t_list	*tmp_p;
-	tmp_p = lst;
+	tmp_p = rt->p_object;
 	while (tmp_p)
 	{
 		t_object	*node;
@@ -68,10 +66,8 @@ t_vec3		ray_color(t_ray r, t_list *lst, int depth)
 		{
 			return (rec.emitted);
 		}
-		return (vec3_add(rec.emitted, vec3_mul_vec3(ray_color(scattered, lst, depth - 1), attenuation)));
+		return (vec3_add(rec.emitted, vec3_mul_vec3(ray_color(scattered, rt, depth - 1), attenuation)));
 	}
 	
-	unit_direction = vec3_unit_vector(r.dir);
-	t = 0.5 * (unit_direction.y + 1.0);
-	return (vec3(0.5, 0.5, 0.5));
+	return (rt->ambient_rgb);
 }

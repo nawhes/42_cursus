@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/31 06:22:33 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/08 19:34:20 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,23 @@ static t_list	*image_node(int width, int height)
 void		rt_resolution(t_minirt *rt)
 {
 	t_list	*p_node;
-	int		width;
-	int		height;
 	int		i;
 
 	i = 0;
 	while (*(rt->line + i) == 'R' || ft_isspace(*(rt->line + i)))
 		i++;
-	if (check_atoi_parameter(rt->line, &i, &width))
+	if (check_atoi_parameter(rt->line, &i, &rt->r_x))
 		error_handle(-2, rt);
 	//have to check MAX_WIDTH
 	while (ft_isspace(*(rt->line + i)))
 		i++;
-	if (check_atoi_parameter(rt->line, &i, &height))
+	if (check_atoi_parameter(rt->line, &i, &rt->r_y))
 		error_handle(-2, rt);
 	while (ft_isspace(*(rt->line + i)))
 		i++;
 	if (*(rt->line + i) != '\0')
 		error_handle(-2, rt);
-	if (!(p_node = image_node(width, height)))
+	if (!(p_node = image_node(rt->r_x, rt->r_y)))
 		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_image), p_node);
 }

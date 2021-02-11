@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/29 23:48:59 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/24 22:50:57 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/04 02:00:14 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,38 @@ int				get_color(t_vec3 color, int sample_per_pixel)
 {
 	int			ret;
 	double		scale = 1.0 / sample_per_pixel;
+	int			r;
+	int			g;
+	int			b;
 	
 	color.x = sqrt(color.x * scale);
 	color.y = sqrt(color.y * scale);
 	color.z = sqrt(color.z * scale);
-/*
+	/*
 	color.x *= scale;
 	color.y *= scale;
 	color.z *= scale;
-*/
+	*/
 
-	ret = (int)(256.0 * clamp(color.x, 0.0, 0.999));
+	/*
+	r = (int)(256.0 * clamp(color.x, 0.0, 0.999));
+	ret = r;
 	ret <<= 8;
-	ret += (int)(256.0 * clamp(color.y, 0.0, 0.999));
+	g = (int)(256.0 * clamp(color.y, 0.0, 0.999));
+	ret += g;
 	ret <<= 8;
-	ret += (int)(256.0 * clamp(color.z, 0.0, 0.999));
+	b = (int)(256.0 * clamp(color.z, 0.0, 0.999));
+	ret += b;
+	*/
+	r = (int)clamp(color.x, 0, 255);
+	ret = r;
+	ret <<= 8;
+	g = (int)clamp(color.y, 0, 255);
+	ret += g;
+	ret <<= 8;
+	b = (int)clamp(color.z, 0, 255);
+	ret += b;
+	//printf("R %d\t G %d\t B %d\n",r,g,b);
 	return (ret);
 }
 
@@ -68,7 +85,7 @@ void			image_render(t_minirt *rt)
 			//	u = ((double)i) / (image->width - 1);
 			//	v = ((double)j) / (image->height - 1);
 				ray = viewport->get_ray(*viewport, u, v);
-				rgb = vec3_add(rgb, ray_color(ray, rt->p_object, MAX_DEPTH));
+				rgb = vec3_add(rgb, ray_color(ray, rt, MAX_DEPTH));
 				k++;
 			}
 			image->rgb[i][j] = get_color(rgb, SAMPLE_PER_PIXEL);

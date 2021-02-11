@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 06:16:41 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/30 06:19:16 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/12 01:04:26 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@
 void		rt_ambientlight(t_minirt *rt);
 void		rt_camera(t_minirt *rt);
 void		rt_light(t_minirt *rt);
-void		rt_rect(t_minirt *rt);
+void		rt_xyrect(t_minirt *rt);
+void		rt_xzrect(t_minirt *rt);
+void		rt_yzrect(t_minirt *rt);
 void		rt_resolution(t_minirt *rt);
 void		rt_sphere(t_minirt *rt);
 

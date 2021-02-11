@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rect.c                                             :+:      :+:    :+:   */
+/*   xyrect.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 22:20:39 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/31 06:05:01 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/12 03:47:37 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 #include <math.h>
 #include <stdlib.h>
 
-int			rect_hit(t_object ob, t_ray *r, t_hit_record *rec)
+int			xyrect_hit(t_object ob, t_ray *r, t_hit_record *rec)
 {
-	t_rect	info = *((t_rect *)ob.info);
+	t_xyrect	info = *((t_xyrect *)ob.info);
 	double	t;
 	double	x;
 	double	y;
@@ -41,49 +41,15 @@ int			rect_hit(t_object ob, t_ray *r, t_hit_record *rec)
 	rec->p = ray_at(*r, rec->t);
 	rec->t_max = rec->t;
 	rec->set_face_normal(rec, r, &outward_normal);
-	if (ob.texture == LAMBERTIAN)
-	{
-		rec->scatter = lambertian_scatter;
-		rec->emitted = vec3(0, 0, 0);
-		rec->rgb = info.rgb;
-	}
-	if (ob.texture == METAL)
-	{
-		rec->scatter = metal_scatter;
-		rec->emitted = vec3(0, 0, 0);
-		rec->rgb = info.rgb;
-	}
-	if (ob.texture == DIELECTRIC)
-	{
-		rec->scatter = dielectric_scatter;
-		rec->emitted = vec3(0, 0, 0);
-		rec->rgb = info.rgb;
-	}
-	if (ob.texture == DIFFUSE_LIGHT)
-	{
-		rec->scatter = NULL;
-		rec->emitted = info.rgb;
-		rec->rgb = info.rgb;
-	}
-	if (ob.texture == CHECK_BOX)
-	{
-		rec->scatter = lambertian_scatter;
-		rec->emitted = vec3(0, 0, 0);
-		double sines;
-		sines = sin(10 * rec->p.x) * sin(10 * rec->p.y) * sin(10 * rec->p.z);
-		if (sines < 0)
-			rec->rgb = vec3(0.2, 0.3, 0.1);
-		else
-			rec->rgb = vec3(0.9, 0.9, 0.9);
-	}
+	set_record(ob, rec, info.rgb);
 	return (1);
 }
 
-t_rect		*rect(t_rect this)
+t_xyrect		*xyrect(t_xyrect this)
 {
-	t_rect		*node;
+	t_xyrect		*node;
 
-	if (!(node = malloc(sizeof(t_rect))))
+	if (!(node = malloc(sizeof(t_xyrect))))
 		return (NULL);
 	node->x0 = this.x0;
 	node->x1 = this.x1;
