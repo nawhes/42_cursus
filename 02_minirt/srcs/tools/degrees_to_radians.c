@@ -6,11 +6,11 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/17 18:48:10 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/17 18:49:09 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/18 04:53:14 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
+#include "minirt.h"
 
 double			degrees_to_radians(double degrees)
 {

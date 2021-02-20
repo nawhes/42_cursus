@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tools.h                                            :+:      :+:    :+:   */
+/*   diffuse_light.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/09 05:54:44 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/30 06:28:59 by sehpark          ###   ########.fr       */
+/*   Created: 2021/02/18 04:17:00 by sehpark           #+#    #+#             */
+/*   Updated: 2021/02/18 04:52:30 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOOLS_H
-# define TOOLS_H
+#include "minirt.h"
 
-# include "struct.h"
-
-double			clamp(double x, double min, double max);
-double			random_double(void);
-double			random_double_range(double min, double max);
-double			degrees_to_radians(double degrees);
-void			error_handle(int handler, t_minirt *rt);
-
-#endif
+void		diffuse_light(t_hit_record *rec)
+{
+	/*
+	if (!rec->front_face)	
+		rec->emitted = vec3_mul(rec->albedo, rec->attr);
+	else
+		rec->emitted = vec3(0, 0, 0);
+	*/
+	rec->emitted = vec3_mul(rec->albedo, rec->attr);
+	return ;
+}

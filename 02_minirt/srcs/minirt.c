@@ -1,24 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lec.c                                              :+:      :+:    :+:   */
+/*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/10 03:43:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/31 06:32:51 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/18 04:44:59 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mlx.h"
-#include "io.h"
 #include "vector.h"
-#include "libft.h"
-
-#include "object.h"
-#include "viewport.h"
-#include "image.h"
-#include "tools.h"
+#include "minirt.h"
 
 static t_minirt	minirt()
 {
@@ -26,6 +20,7 @@ static t_minirt	minirt()
 
 	this.p_viewport = NULL;
 	this.p_object = NULL;
+	this.p_light = NULL;
 	this.p_image = NULL;
 	return (this);
 }
@@ -39,7 +34,9 @@ int main(int argc, char **argv)
 	if (argc > 1)
 		read_rt(*(argv + 1), &rt);
 	else
+	{
 		return (0);
+	}
 
 	image_render(&rt);
 

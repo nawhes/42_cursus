@@ -6,14 +6,22 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 07:20:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/31 06:30:03 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/18 04:53:22 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
-#include "libft.h"
+#include "minirt.h"
 
 static void	free_object_info(void *ob)
+{
+	t_object	*tmp;
+
+	tmp = (t_object *)ob;
+	free(tmp->info);
+	return ;
+}
+
+static void	free_light_info(void *ob)
 {
 	t_object	*tmp;
 
@@ -43,6 +51,8 @@ static void	before_exit(t_minirt *rt)
 	ft_lstclear(&(rt->p_viewport), free);
 	ft_lstiter(rt->p_object, free_object_info);
 	ft_lstclear(&(rt->p_object), free);
+	ft_lstiter(rt->p_light, free_light_info);
+	ft_lstclear(&(rt->p_light), free);
 	ft_lstiter(rt->p_image, free_image_rgb);
 	ft_lstclear(&(rt->p_image), free);
 	free(rt->line);

@@ -6,12 +6,11 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/29 23:08:45 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/31 04:19:34 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/18 04:39:06 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
-#include "image.h"
+#include "minirt.h"
 
 t_image			*image(int width, int height)
 {

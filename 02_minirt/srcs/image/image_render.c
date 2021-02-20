@@ -6,52 +6,35 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/29 23:48:59 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/04 02:00:14 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/21 05:08:57 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
+#include "minirt.h"
 #include "vector.h"
-#include "image.h"
-#include "viewport.h"
-#include "tools.h"
 
 int				get_color(t_vec3 color, int sample_per_pixel)
 {
 	int			ret;
-	double		scale = 1.0 / sample_per_pixel;
-	int			r;
-	int			g;
-	int			b;
+	double		scale;
 	
+	if (color.x != color.x)
+		color.x = 0.0;
+	if (color.y != color.y)
+		color.y = 0.0;
+	if (color.z != color.z)
+		color.z = 0.0;
+
+	scale = 1.0 / (double)sample_per_pixel;
 	color.x = sqrt(color.x * scale);
 	color.y = sqrt(color.y * scale);
 	color.z = sqrt(color.z * scale);
-	/*
-	color.x *= scale;
-	color.y *= scale;
-	color.z *= scale;
-	*/
 
-	/*
-	r = (int)(256.0 * clamp(color.x, 0.0, 0.999));
-	ret = r;
+	ret = (int)(256.0 * clamp(color.x, 0.0, 0.999));
 	ret <<= 8;
-	g = (int)(256.0 * clamp(color.y, 0.0, 0.999));
-	ret += g;
+	ret += (int)(256.0 * clamp(color.y, 0.0, 0.999));
 	ret <<= 8;
-	b = (int)(256.0 * clamp(color.z, 0.0, 0.999));
-	ret += b;
-	*/
-	r = (int)clamp(color.x, 0, 255);
-	ret = r;
-	ret <<= 8;
-	g = (int)clamp(color.y, 0, 255);
-	ret += g;
-	ret <<= 8;
-	b = (int)clamp(color.z, 0, 255);
-	ret += b;
-	//printf("R %d\t G %d\t B %d\n",r,g,b);
+	ret += (int)(256.0 * clamp(color.z, 0.0, 0.999));
 	return (ret);
 }
 

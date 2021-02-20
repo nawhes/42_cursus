@@ -6,15 +6,11 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 21:32:55 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/04 02:05:59 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/21 05:33:50 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
-#include "vector.h"
-#include "viewport.h"
-#include "tools.h"
-#include "object.h"
+#include "minirt.h"
 
 t_ray			ray(t_vec3 orig, t_vec3 dir)
 {
@@ -35,6 +31,38 @@ t_vec3			ray_at(t_ray a, double t)
 	return (ret);
 }
 
+static double	cosine_pdf(t_hit_record *rec, t_ray ray)
+{
+	t_onb	uvw;
+	uvw = onb_build_from_w(rec->normal);
+	double cosine;
+	cosine = vec3_dot(vec3_unit_vector(ray.dir), uvw.w);
+	if (cosine < 0)
+		return (0);
+	return (cosine / PI);
+}
+
+static int	intersection(t_ray r, t_list *p, t_hit_record *rec)
+{
+	int			handler;
+	t_list		*p_ob;
+	t_object	*node;
+
+	handler = 0;
+	p_ob = p;
+	while (p_ob)
+	{
+		node = (t_object *)p_ob->content;
+		if (node->hit(*node, r, rec))
+		{
+			set_record(*node, rec);
+			handler = 1;
+		}
+		p_ob = p_ob->next;
+	}
+	return (handler);
+}
+
 t_vec3		ray_color(t_ray r, t_minirt *rt, int depth)
 {
 	if (depth <= 0)
@@ -43,31 +71,39 @@ t_vec3		ray_color(t_ray r, t_minirt *rt, int depth)
 	t_hit_record	rec;
 	rec = hit_record();
 
-	int		i;
-	int		handler;
+	if (!intersection(r, rt->p_object, &rec))
+		return (rt->ambient_rgb);
 
-	handler = 0;
-	i = 0;
-	t_list	*tmp_p;
-	tmp_p = rt->p_object;
-	while (tmp_p)
+	double	texture_pdf = 1;
+	double	pdf = 1;
+	//분기점
+	if (rec.texture == DIFFUSE_LIGHT)
 	{
-		t_object	*node;
-		node = (t_object *)tmp_p->content;
-		if (node->hit(*node, &r, &rec))
-			handler = 1;
-		tmp_p = tmp_p->next;
+		diffuse_light(&rec);
+		return (rec.emitted);
 	}
-	if (handler)
+	if (rec.texture == LAMBERTIAN)
 	{
-		t_ray scattered;
-		t_vec3 attenuation;
-		if (rec.scatter == NULL || !rec.scatter(&r, &rec, &attenuation, &scattered))
-		{
-			return (rec.emitted);
-		}
-		return (vec3_add(rec.emitted, vec3_mul_vec3(ray_color(scattered, rt, depth - 1), attenuation)));
+		lambertian(&rec, light_random(rt->p_light, rec.p));
+		texture_pdf = cosine_pdf(&rec, rec.ray);
+		pdf = texture_pdf * 0.5 + light_pdf(rt->p_light, rec.ray) * 0.5;
 	}
-	
-	return (rt->ambient_rgb);
+	if (rec.texture == METAL)
+	{
+		metal(&r, &rec);
+	}
+	if (rec.texture == DIELECTRIC)
+	{
+		dielectric(&r, &rec);
+	}
+	if (rec.texture == CHECK_BOX)
+	{
+		check_box(&rec, light_random(rt->p_light, rec.p));
+	}
+
+	t_vec3	ret;
+	ret = vec3_mul_vec3(ray_color(rec.ray, rt, depth - 1), rec.attenuation);
+	ret = vec3_mul(ret, texture_pdf);
+	ret = vec3_div(ret, pdf);
+	return (vec3_add(rec.emitted, ret));
 }

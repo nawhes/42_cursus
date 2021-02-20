@@ -6,14 +6,11 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/29 22:52:31 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/10 04:13:14 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/18 04:54:38 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
-#include "vector.h"
-#include "viewport.h"
-#include "tools.h"
+#include "minirt.h"
 #include <math.h>
 
 t_ray			viewport_get_ray(t_viewport vp, double s, double t)

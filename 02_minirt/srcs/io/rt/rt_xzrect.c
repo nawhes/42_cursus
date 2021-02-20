@@ -6,17 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/12 01:10:46 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/18 04:48:20 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
-#include "tools.h"
-#include "rt.h"
-#include "vector.h"
-#include "object.h"
+#include "minirt.h"
 
-static t_list	*xzrect_node(t_xzrect rectangle, int texture)
+static t_list	*xzrect_node(t_xzrect rectangle, int texture, double attr)
 {
 	t_xzrect	*p_rect;
 	t_object	*p_ob;
@@ -24,7 +20,7 @@ static t_list	*xzrect_node(t_xzrect rectangle, int texture)
 
 	if (!(p_rect = xzrect(rectangle)))
 		return (NULL);
-	if (!(p_ob = object((void *)p_rect, OB_XZRECT, texture)))
+	if (!(p_ob = object((void *)p_rect, OB_XZRECT, texture, attr)))
 	{
 		free(p_rect);
 		return (NULL);
@@ -44,6 +40,7 @@ void		rt_xzrect(t_minirt *rt)
 	t_xzrect	rectangle;
 	t_list	*p_node;
 	int		texture;
+	double	attr;
 
 	i = 0;
 	while (*(rt->line + i) == 'x' || *(rt->line + i) == 'z' || ft_isspace(*(rt->line + i)))
@@ -70,10 +67,14 @@ void		rt_xzrect(t_minirt *rt)
 		error_handle(-2, rt);
 	while (ft_isspace(*(rt->line + i)))
 		i++;
+	if (check_atof_parameter(rt->line, &i, &attr))
+		error_handle(-2, rt);
+	while (ft_isspace(*(rt->line + i)))
+		i++;
 	if (*(rt->line + i) != '\0')
 		error_handle(-2, rt);
 
-	if (!(p_node = xzrect_node(rectangle, texture)))
+	if (!(p_node = xzrect_node(rectangle, texture, attr)))
 		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_object), p_node);
 }

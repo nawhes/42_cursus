@@ -6,15 +6,14 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 01:55:46 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/12 01:04:10 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/18 04:45:15 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "io.h"
+#include "minirt.h"
 #include "struct.h"
 #include "rt.h"
-#include "tools.h"
 
 static void	parse_rt(t_minirt *rt)
 {

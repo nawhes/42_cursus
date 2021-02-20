@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   metal_scatter.c                                    :+:      :+:    :+:   */
+/*   check_box.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/11 03:44:34 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/31 05:46:45 by sehpark          ###   ########.fr       */
+/*   Created: 2021/02/18 04:25:09 by sehpark           #+#    #+#             */
+/*   Updated: 2021/02/21 04:48:07 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
-#include "viewport.h"
-#include "vector.h"
+#include "minirt.h"
 
-int			metal_scatter(t_ray *r_in, t_hit_record *rec, t_vec3 *attenuation, t_ray *scattered)
+void		check_box(t_hit_record *rec, t_vec3 dir)
 {
-	t_vec3	reflected;
-
-	reflected = reflect(vec3_unit_vector(r_in->dir), rec->normal);
-	*scattered = ray(rec->p, reflected);
-	*attenuation = rec->rgb;
-	return (vec3_dot(scattered->dir, rec->normal) > 0);
+	double sines;
+	sines = sin(10 * rec->p.x) * sin(10 * rec->p.y) * sin(10 * rec->p.z);
+	if (sines < 0)
+		rec->albedo = vec3(0.2, 0.3, 0.1);
+	else
+		rec->albedo = vec3(0.9, 0.9, 0.9);
+	lambertian(rec, dir);
+	return ;
 }

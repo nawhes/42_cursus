@@ -6,15 +6,11 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/08 19:34:20 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/18 04:47:54 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
-#include "tools.h"
-#include "rt.h"
-#include "image.h"
-#include "libft.h"
+#include "minirt.h"
 
 static t_list	*image_node(int width, int height)
 {

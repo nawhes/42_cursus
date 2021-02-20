@@ -1,26 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   viewport.h                                         :+:      :+:    :+:   */
+/*   metal.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/29 23:00:13 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/03 16:05:28 by sehpark          ###   ########.fr       */
+/*   Created: 2021/01/11 03:44:34 by sehpark           #+#    #+#             */
+/*   Updated: 2021/02/18 04:52:57 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VIEWPORT_H
-# define VIEWPORT_H
+#include "minirt.h"
 
-# include "struct.h"
+void		metal(t_ray *r_in, t_hit_record *rec)
+{
+	t_vec3	dir;
+	/*
+	t_vec3	tmp;
+	tmp = vec3_random_range(-rec->attr, rec->attr);
+	tmp = vec3_add(tmp, r_in->dir);
 
-t_viewport		*viewport(t_viewport this);
-
-t_hit_record	hit_record();
-
-t_ray			ray(t_vec3 orig, t_vec3 dir);
-t_vec3			ray_at(t_ray a, double t);
-t_vec3			ray_color(t_ray r, t_minirt *rt, int depth);
-
-#endif
+	dir = reflect(vec3_unit_vector(tmp), rec->normal);
+	*/
+	dir = reflect(vec3_unit_vector(r_in->dir), rec->normal);
+	rec->ray = ray(rec->p, dir);
+	rec->attenuation = rec->albedo;
+	return ;
+}

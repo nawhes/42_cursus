@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 21:28:27 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/12 03:40:03 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/21 00:28:12 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,6 @@
 # define STRUCT_H
 
 # include "libft.h"
-# include <stdio.h>
-# include <stdlib.h>
-
-# define	LAMBERTIAN		1
-# define	METAL			2
-# define	DIELECTRIC		3
-# define	DIFFUSE_LIGHT	4
-# define	CHECK_BOX		5
-
-# define	OB_SPHERE		11
-# define	OB_XYRECT		12
-# define	OB_YZRECT		13
-# define	OB_XZRECT		14
-
-# define	PI				3.1415926535897932385
-# define	SAMPLE_PER_PIXEL	20
-# define	MAX_DEPTH			20
 
 typedef	struct		s_vec3
 {
@@ -45,6 +28,13 @@ typedef struct		s_ray
 	t_vec3			dir;
 }					t_ray;
 
+typedef struct		s_onb
+{
+	t_vec3			u;
+	t_vec3			v;
+	t_vec3			w;
+}					t_onb;
+
 typedef struct		s_hit_record
 {
 	t_vec3			p;
@@ -54,22 +44,16 @@ typedef struct		s_hit_record
 	double			t_max;
 	double			u;
 	double			v;
-	double			ir;
-	t_vec3			albedo;
 	int				front_face;
 	void			(*set_face_normal)
-		(struct s_hit_record *this, t_ray *r, t_vec3 *outward_normal);
-	int				(*scatter)
-		(t_ray *r_in, struct s_hit_record *rec, t_ray *scattered, double *pdf);
+		(struct s_hit_record *this, t_ray r, t_vec3 *outward_normal);
+	double			attr;
+	int				texture;
+	t_vec3			albedo;
 	t_vec3			emitted;
-}					t_hit_record;
-
-typedef struct		s_scatter_record
-{
-	t_ray			specular_ray;
-	int				is_specular;
 	t_vec3			attenuation;
-}					t_scatter_record;
+	t_ray			ray;
+}					t_hit_record;
 
 /*
 **
@@ -120,8 +104,18 @@ typedef struct		s_object
 	void			*info;
 	int				type;
 	int				texture;
-	int				(*hit)(struct s_object ob, t_ray *r, t_hit_record *rec);
+	double			attr;
+	int				(*hit)(struct s_object ob, t_ray r, t_hit_record *rec);
 }					t_object;
+
+/*
+typedef struct		s_light
+{
+	t_vec3			coord;
+	double			ratio;
+	t_vec3			rgb;
+}					t_light;
+*/
 
 typedef struct		s_sphere
 {
@@ -162,7 +156,7 @@ typedef struct		s_yzrect
 
 typedef struct		s_plane
 {
-	t_vec3			coord;
+	t_vec3			corrd;
 	t_vec3			orientation;
 	t_vec3			rgb;
 	double			side_size;
@@ -194,6 +188,7 @@ typedef struct		s_minirt
 	char			*line;
 	t_list			*p_viewport;
 	t_list			*p_object;
+	t_list			*p_light;
 	t_list			*p_image;
 }					t_minirt;
 

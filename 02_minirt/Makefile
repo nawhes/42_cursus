@@ -6,7 +6,7 @@
 #    By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/01 05:08:59 by sehpark           #+#    #+#              #
-#    Updated: 2021/02/12 03:36:22 by sehpark          ###   ########.fr        #
+#    Updated: 2021/02/21 03:35:01 by sehpark          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,14 +62,18 @@ SRCS	= minirt.c \
 		  viewport/ray.c \
 		  viewport/hit_record.c \
 		  object/object.c \
+		  object/onb.c \
+		  object/random_light.c \
 		  object/sphere.c \
 		  object/xyrect.c \
 		  object/xzrect.c \
 		  object/yzrect.c \
 		  object/set_record.c \
-		  object/lambertian_scatter.c \
-		  object/metal_scatter.c \
-		  object/dielectric_scatter.c \
+		  texture/lambertian.c \
+		  texture/metal.c \
+		  texture/dielectric.c \
+		  texture/diffuse_light.c \
+		  texture/check_box.c \
 		  image/image.c \
 		  image/image_render.c \
 		  tools/error_handle.c \

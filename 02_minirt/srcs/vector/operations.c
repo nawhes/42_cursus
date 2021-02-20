@@ -6,13 +6,12 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 20:55:49 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/16 06:51:27 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/18 04:53:52 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.h"
-#include "struct.h"
-#include "tools.h"
+#include "minirt.h"
 
 t_vec3				vec3(double x, double y, double z)
 {
@@ -61,6 +60,14 @@ t_vec3				vec3_div(t_vec3 a, double b)
 	a.x *= 1 / b;
 	a.y *= 1 / b;
 	a.z *= 1 / b;
+	return (a);
+}
+
+t_vec3				vec3_div_vec3(t_vec3 a, t_vec3 b)
+{
+	a.x /= b.x;
+	a.y /= b.y;
+	a.z /= b.z;
 	return (a);
 }
 
@@ -133,6 +140,17 @@ t_vec3				vec3_random_in_unit_sphere()
 t_vec3				vec3_random_unit_vector()
 {
 	return (vec3_unit_vector(vec3_random_in_unit_sphere()));
+}
+
+t_vec3				vec3_random_in_hemisphere(t_vec3 normal)
+{
+	t_vec3			in_unit_sphere;
+
+	in_unit_sphere = vec3_random_in_unit_sphere();
+	if (vec3_dot(in_unit_sphere, normal) > 0.0)
+		return (in_unit_sphere);
+	else
+		return (vec3_mul(in_unit_sphere, -1));
 }
 
 int					vec3_near_zero(t_vec3 vec)

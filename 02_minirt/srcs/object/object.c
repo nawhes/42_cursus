@@ -6,14 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 05:48:45 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/31 05:16:02 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/20 23:27:00 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
-#include "object.h"
+#include "minirt.h"
 
-t_object		*object(void *info, int type, int texture)
+t_object		*object(void *info, int type, int texture, double attr)
 {
 	t_object	*node;
 
@@ -22,9 +21,14 @@ t_object		*object(void *info, int type, int texture)
 	node->info = info;
 	node->type = type;
 	node->texture = texture;
+	node->attr = attr;
 	if (type == OB_SPHERE)
 		node->hit = sphere_hit;
-	if (type == OB_RECT)
-		node->hit = rect_hit;
+	if (type == OB_XYRECT)
+		node->hit = xyrect_hit;
+	if (type == OB_XZRECT)
+		node->hit = xzrect_hit;
+	if (type == OB_YZRECT)
+		node->hit = yzrect_hit;
 	return (node);
 }

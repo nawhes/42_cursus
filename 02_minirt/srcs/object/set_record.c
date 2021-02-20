@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   atovec3.c                                          :+:      :+:    :+:   */
+/*   set_record.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/30 04:42:03 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/18 04:48:48 by sehpark          ###   ########.fr       */
+/*   Created: 2021/02/12 03:30:30 by sehpark           #+#    #+#             */
+/*   Updated: 2021/02/20 23:45:20 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int			atovec3(char *line, int *i, t_vec3 *target)
+void		set_record(t_object ob, t_hit_record *rec)
 {
-	double	x;
-	double	y;
-	double	z;
-
-	if (check_atof_parameter(line, i, &x) || next(line, i))
-		return (-1);
-	if (check_atof_parameter(line, i, &y) || next(line, i))
-		return (-1);
-	if (check_atof_parameter(line, i, &z))
-		return (-1);
-	*target = vec3(x, y, z);
-	// have to check_range
-	return (0);
+	rec->attr = ob.attr;
+	rec->texture = ob.texture;
+	if (ob.type == OB_SPHERE)
+		rec->albedo = ((t_sphere *)ob.info)->rgb;
+	if (ob.type == OB_XYRECT)
+		rec->albedo = ((t_xyrect *)ob.info)->rgb;
+	if (ob.type == OB_XZRECT)
+		rec->albedo = ((t_xzrect *)ob.info)->rgb;
+	if (ob.type == OB_YZRECT)
+		rec->albedo = ((t_yzrect *)ob.info)->rgb;
+	return ;
 }

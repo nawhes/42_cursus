@@ -6,17 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/31 06:17:35 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/18 04:48:08 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
-#include "tools.h"
-#include "rt.h"
-#include "vector.h"
-#include "object.h"
+#include "minirt.h"
 
-static t_list	*sphere_node(t_sphere sp, int texture)
+static t_list	*sphere_node(t_sphere sp, int texture, double attr)
 {
 	t_sphere	*p_sp;
 	t_object	*p_ob;
@@ -24,7 +20,7 @@ static t_list	*sphere_node(t_sphere sp, int texture)
 
 	if (!(p_sp = sphere(sp)))
 		return (NULL);
-	if (!(p_ob = object((void *)p_sp, OB_SPHERE, texture)))
+	if (!(p_ob = object((void *)p_sp, OB_SPHERE, texture, attr)))
 	{
 		free(p_sp);
 		return (NULL);
@@ -43,6 +39,7 @@ void		rt_sphere(t_minirt *rt)
 	int			i;
 	t_sphere	sp;
 	int			texture;
+	double		attr;
 	t_list		*p_node;
 
 	i = 0;
@@ -59,6 +56,7 @@ void		rt_sphere(t_minirt *rt)
 		i++;
 	if (atovec3(rt->line, &i, &sp.rgb))
 		error_handle(-2, rt);
+	sp.rgb = vec3_div(sp.rgb, 255);
 	//have to check_range
 	while (ft_isspace(*(rt->line + i)))
 		i++;
@@ -66,10 +64,15 @@ void		rt_sphere(t_minirt *rt)
 		error_handle(-2, rt);
 	while (ft_isspace(*(rt->line + i)))
 		i++;
+	if (check_atof_parameter(rt->line, &i, &attr))
+		error_handle(-2, rt);
+
+	while (ft_isspace(*(rt->line + i)))
+		i++;
 	if (*(rt->line + i) != '\0')
 		error_handle(-2, rt);
 
-	if (!(p_node = sphere_node(sp, texture)))
+	if (!(p_node = sphere_node(sp, texture, attr)))
 		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_object), p_node);
 }

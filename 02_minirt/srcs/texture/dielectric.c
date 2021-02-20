@@ -1,19 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dielectric_scatter.c                               :+:      :+:    :+:   */
+/*   dielectric.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/16 00:23:55 by sehpark           #+#    #+#             */
-/*   Updated: 2021/01/31 05:46:19 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/18 04:52:23 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
-#include "viewport.h"
-#include "vector.h"
-#include "tools.h"
+#include "minirt.h"
 
 double		reflectance(double cosine, double ref_idx)
 {
@@ -24,29 +21,29 @@ double		reflectance(double cosine, double ref_idx)
 	return (r0 + (1.0 - r0) * pow((1.0 - cosine), 5));
 }
 
-int			dielectric_scatter(t_ray *r_in, t_hit_record *rec, t_vec3 *attenuation, t_ray *scattered)
+void		dielectric(t_ray *r_in, t_hit_record *rec)
 {
+	t_vec3	dir;
+
 	double	refraction_ratio;
 	t_vec3	unit_direction;
 	double	ir;
 	double	cos_theta;
 	double	sin_theta;
-	t_vec3	direction;
-
 
 	ir = 1.5;
-	//*attenuation = rec->rgb;
-	*attenuation = vec3(1, 1, 1);
 	unit_direction = vec3_unit_vector(r_in->dir);
 	refraction_ratio = rec->front_face ? (1.0 / ir) : ir;
 	cos_theta = fmin(vec3_dot(vec3_mul(unit_direction, -1), rec->normal), 1.0);
 	sin_theta = sqrt(1.0 - cos_theta * cos_theta);
 
-	if (refraction_ratio * sin_theta > 1.0 || reflectance(cos_theta, refraction_ratio) > random_double())
-		direction = reflect(unit_direction, rec->normal);
+	if (refraction_ratio * sin_theta > 1.0 || 
+			reflectance(cos_theta, refraction_ratio) > random_double())
+		dir = reflect(unit_direction, rec->normal);
 	else
-		direction = refract(unit_direction, rec->normal, refraction_ratio);
+		dir = refract(unit_direction, rec->normal, refraction_ratio);
 
-	*scattered = ray(rec->p, direction);
-	return (1);
+	rec->attenuation = vec3(1, 1, 1);
+	rec->ray = ray(rec->p, dir);
+	return ;
 }
