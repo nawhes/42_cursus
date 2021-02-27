@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 05:22:17 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/21 04:07:52 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/28 07:03:36 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static t_vec3	random_to_sphere(double radius, double distance_squared)
 	return (vec3(x, y, z));
 }
 
-static t_vec3	sphere_random(t_sphere *sp, t_vec3 o)
+t_vec3		sphere_random(t_sphere *sp, t_vec3 o)
 {
 	t_vec3	direction = vec3_sub(sp->coord, o);
 	double	distance_squared = vec3_length_square(direction);
@@ -51,7 +51,7 @@ t_vec3			light_random(t_list *p_light, t_vec3 o)
 	return (sphere_random(sp, o));
 }
 
-static double	light_pdf_value(t_object *p_ob, t_ray r)
+double		light_pdf_value(t_object *p_ob, t_ray r)
 {
 	t_hit_record	rec;
 	rec = hit_record();

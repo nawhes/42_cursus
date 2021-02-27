@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 04:17:50 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/21 05:32:37 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/28 06:59:46 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,11 @@
 # define	OB_XZRECT		14
 
 # define	PI				3.1415926535897932385
-# define	SAMPLE_PER_PIXEL	20
-# define	MAX_DEPTH			10
+# define	SAMPLE_PER_PIXEL	64
+# define	MAX_DEPTH			20
 
+t_vec3		sphere_random(t_sphere *sp, t_vec3 o);
+double		light_pdf_value(t_object *p_ob, t_ray r);
 
 /*
 ** io
@@ -89,10 +91,10 @@ double		light_pdf(t_list *p_light, t_ray r);
 */
 
 void		diffuse_light(t_hit_record *rec);
-void		lambertian(t_hit_record *rec, t_vec3 dir);
+void		lambertian(t_hit_record *rec, t_vec3 dir, double *texture_pdf);
 void		metal(t_ray *r_in, t_hit_record *rec);
 void		dielectric(t_ray *r_in, t_hit_record *rec);
-void		check_box(t_hit_record *rec, t_vec3 dir);
+void		check_box(t_hit_record *rec, t_vec3 dir, double *texture_pdf);
 
 /*
 ** onb

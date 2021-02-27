@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/29 23:48:59 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/21 05:08:57 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/28 05:29:02 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ int				get_color(t_vec3 color, int sample_per_pixel)
 	color.y = sqrt(color.y * scale);
 	color.z = sqrt(color.z * scale);
 
-	ret = (int)(256.0 * clamp(color.x, 0.0, 0.999));
+	ret = (int)(255.0 * clamp(color.x, 0.0, 0.999));
 	ret <<= 8;
-	ret += (int)(256.0 * clamp(color.y, 0.0, 0.999));
+	ret += (int)(255.0 * clamp(color.y, 0.0, 0.999));
 	ret <<= 8;
-	ret += (int)(256.0 * clamp(color.z, 0.0, 0.999));
+	ret += (int)(255.0 * clamp(color.z, 0.0, 0.999));
 	return (ret);
 }
 

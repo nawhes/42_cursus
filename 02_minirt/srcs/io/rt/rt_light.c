@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/18 04:47:46 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/02/28 07:05:02 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,9 @@ void		rt_light(t_minirt *rt)
 	if (*(rt->line + i) != '\0')
 		error_handle(-2, rt);
 	
-	if (!(p_node = sphere_node(sp, DIFFUSE_LIGHT, attr)))
-		error_handle(-3, rt);
-	ft_lstadd_back(&(rt->p_object), p_node);
+//	if (!(p_node = sphere_node(sp, DIFFUSE_LIGHT, attr)))
+//		error_handle(-3, rt);
+//	ft_lstadd_back(&(rt->p_object), p_node);
 	if (!(p_node = sphere_node(sp, DIFFUSE_LIGHT, attr)))
 		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_light), p_node);
