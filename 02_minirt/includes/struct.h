@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 21:28:27 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/21 00:28:12 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/02 04:47:20 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,28 @@ typedef struct		s_onb
 
 typedef struct		s_hit_record
 {
-	t_vec3			p;
-	t_vec3			normal;
 	double			t;
 	double			t_min;
 	double			t_max;
 	double			u;
 	double			v;
-	int				front_face;
-	void			(*set_face_normal)
-		(struct s_hit_record *this, t_ray r, t_vec3 *outward_normal);
-	double			attr;
+}					t_hit_record;
+
+typedef struct		s_brdf
+{
 	int				texture;
+	double			attr;
+	int				front_face;
+	t_vec3			point;
+	t_vec3			normal;
+	t_vec3			wo;
+	t_vec3			wi;
+	t_vec3			wh;
 	t_vec3			albedo;
-	t_vec3			emitted;
 	t_vec3			attenuation;
 	t_ray			ray;
-}					t_hit_record;
+}					t_brdf;
+
 
 /*
 **

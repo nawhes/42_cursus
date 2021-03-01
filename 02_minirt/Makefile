@@ -6,7 +6,7 @@
 #    By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/01 05:08:59 by sehpark           #+#    #+#              #
-#    Updated: 2021/02/21 03:35:01 by sehpark          ###   ########.fr        #
+#    Updated: 2021/03/01 00:51:28 by sehpark          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,6 +74,7 @@ SRCS	= minirt.c \
 		  texture/dielectric.c \
 		  texture/diffuse_light.c \
 		  texture/check_box.c \
+		  texture/microfacet.c \
 		  image/image.c \
 		  image/image_render.c \
 		  tools/error_handle.c \

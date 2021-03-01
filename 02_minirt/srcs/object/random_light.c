@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 05:22:17 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/28 07:03:36 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/02 03:45:53 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,15 @@ double		light_pdf_value(t_object *p_ob, t_ray r)
 	rec = hit_record();
 	t_sphere		*sp = (t_sphere *)p_ob->info;
 	if (!p_ob->hit(*p_ob, r, &rec))
-		return (0);
+	{
+		if (rec.texture == DIELECTRIC)
+		{
+			r.orig = rec.p;
+
+		}
+		else
+			return (0);
+	}
 
 	double	diameter = sp->diameter;
 	double	distance = vec3_length_square(vec3_sub(sp->coord, r.orig));

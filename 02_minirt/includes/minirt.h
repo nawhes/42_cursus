@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 04:17:50 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/28 06:59:46 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/02 02:49:22 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define	DIFFUSE_LIGHT	4
 # define	CHECK_BOX		5
 # define	SPECULAR		6
+# define	MICROFACET		7
 
 # define	OB_SPHERE		11
 # define	OB_XYRECT		12
@@ -33,11 +34,16 @@
 # define	OB_XZRECT		14
 
 # define	PI				3.1415926535897932385
-# define	SAMPLE_PER_PIXEL	64
-# define	MAX_DEPTH			20
+# define	SAMPLE_PER_PIXEL	20
+# define	MAX_DEPTH			5
 
 t_vec3		sphere_random(t_sphere *sp, t_vec3 o);
+double		cosine_pdf(t_vec3 normal, t_vec3 wi);
 double		light_pdf_value(t_object *p_ob, t_ray r);
+void		microfacet(t_hit_record *rec, double *texture_pdf, t_ray r_in);
+double		microfacet_pdf(double roughness, t_vec3 wg, t_vec3 wi, t_vec3 wo);
+t_vec3		lambert_eval(t_hit_record rec, t_vec3 wi);
+t_vec3		microfacet_eval(t_hit_record rec, t_vec3 wi, t_vec3 wo);
 
 /*
 ** io
@@ -91,16 +97,18 @@ double		light_pdf(t_list *p_light, t_ray r);
 */
 
 void		diffuse_light(t_hit_record *rec);
-void		lambertian(t_hit_record *rec, t_vec3 dir, double *texture_pdf);
+t_vec3		random_cosine_direction();
+void		lambertian(t_hit_record *rec, double *texture_pdf);
 void		metal(t_ray *r_in, t_hit_record *rec);
-void		dielectric(t_ray *r_in, t_hit_record *rec);
-void		check_box(t_hit_record *rec, t_vec3 dir, double *texture_pdf);
+void		dielectric(t_ray r, t_hit_record *rec);
+void		check_box(t_hit_record *rec, double *texture_pdf);
 
 /*
 ** onb
 */
 
 t_onb		onb_build_from_w(t_vec3 n);
+t_onb		onb_build_from_v(t_vec3 n);
 t_vec3		onb_local(t_onb uvw, t_vec3 a);
 double		onb_value(t_onb uvw, t_vec3 dir);
 
@@ -127,6 +135,8 @@ void			image_render(t_minirt *rt);
 ** tools
 */
 
+double			double_max(double a, double b);
+double			double_min(double a, double b);
 double			clamp(double x, double min, double max);
 double			random_double(void);
 double			random_double_range(double min, double max);
