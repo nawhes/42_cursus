@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/29 23:48:59 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/28 05:29:02 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/02 08:37:02 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,13 @@ void			image_render(t_minirt *rt)
 		while (i < image->width)
 		{
 			k = 0;
-			rgb = vec3(0, 0, 0);
+			rgb = vec3(0);
 			while (k < SAMPLE_PER_PIXEL)
 			{
 				u = ((double)i + random_double()) / (image->width - 1);
 				v = ((double)j + random_double()) / (image->height - 1);
-			//	u = ((double)i) / (image->width - 1);
-			//	v = ((double)j) / (image->height - 1);
 				ray = viewport->get_ray(*viewport, u, v);
-				rgb = vec3_add(rgb, ray_color(ray, rt, MAX_DEPTH));
+				rgb = v_add_v(rgb, trace(ray, rt, MAX_DEPTH));
 				k++;
 			}
 			image->rgb[i][j] = get_color(rgb, SAMPLE_PER_PIXEL);

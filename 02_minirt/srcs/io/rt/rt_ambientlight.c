@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/18 04:46:29 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/02 08:00:27 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static void	set_ambientlight(t_minirt *rt)
 {
-	rt->ambient_rgb = vec3_div(rt->ambient_rgb, 255);
-	rt->ambient_rgb = vec3_mul(rt->ambient_rgb, rt->ambient_ratio);
+	rt->ambient_rgb = v_div(rt->ambient_rgb, 255);
+	rt->ambient_rgb = v_mul(rt->ambient_rgb, rt->ambient_ratio);
 }
 
 void		rt_ambientlight(t_minirt *rt)

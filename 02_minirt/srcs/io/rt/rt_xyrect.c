@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/18 04:48:14 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/02 08:01:32 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void		rt_xyrect(t_minirt *rt)
 		i++;
 	if (atovec3(rt->line, &i, &rectangle.rgb))
 		error_handle(-2, rt);
-	rectangle.rgb = vec3_div(rectangle.rgb, 255);
+	rectangle.rgb = v_div(rectangle.rgb, 255);
 	//have to check_range
 	while (ft_isspace(*(rt->line + i)))
 		i++;

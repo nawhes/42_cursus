@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_box.c                                        :+:      :+:    :+:   */
+/*   mirror.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/18 04:25:09 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/01 01:04:07 by sehpark          ###   ########.fr       */
+/*   Created: 2021/01/11 03:44:34 by sehpark           #+#    #+#             */
+/*   Updated: 2021/03/02 08:43:48 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void		check_box(t_hit_record *rec, double *texture_pdf)
+void		mirror(t_brdf *brdf)
 {
-	double sines;
-	sines = sin(10 * rec->p.x) * sin(10 * rec->p.y) * sin(10 * rec->p.z);
-	if (sines < 0)
-		rec->albedo = vec3(0.2, 0.3, 0.1);
-	else
-		rec->albedo = vec3(0.9, 0.9, 0.9);
-	lambertian(rec, texture_pdf);
+	brdf->wi = reflect(v_mul(brdf->wo, -1), brdf->normal);
+	brdf->ray = ray(brdf->point, brdf->wi);
+	brdf->attenuation = brdf->albedo;
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:42:03 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/18 04:48:48 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/02 08:05:46 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int			atovec3(char *line, int *i, t_vec3 *target)
 		return (-1);
 	if (check_atof_parameter(line, i, &z))
 		return (-1);
-	*target = vec3(x, y, z);
+	*target = vec(x, y, z);
 	// have to check_range
 	return (0);
 }

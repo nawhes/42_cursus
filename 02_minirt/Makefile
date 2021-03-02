@@ -6,7 +6,7 @@
 #    By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/01 05:08:59 by sehpark           #+#    #+#              #
-#    Updated: 2021/03/01 00:51:28 by sehpark          ###   ########.fr        #
+#    Updated: 2021/03/02 08:45:08 by sehpark          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,27 +60,28 @@ SRCS	= minirt.c \
 		  vector/operations.c \
 		  viewport/viewport.c \
 		  viewport/ray.c \
-		  viewport/hit_record.c \
 		  object/object.c \
-		  object/onb.c \
-		  object/random_light.c \
 		  object/sphere.c \
 		  object/xyrect.c \
 		  object/xzrect.c \
 		  object/yzrect.c \
-		  object/set_record.c \
-		  texture/lambertian.c \
-		  texture/metal.c \
-		  texture/dielectric.c \
-		  texture/diffuse_light.c \
-		  texture/check_box.c \
-		  texture/microfacet.c \
 		  image/image.c \
 		  image/image_render.c \
 		  tools/error_handle.c \
-		  tools/random_double.c \
+		  tools/random.c \
 		  tools/clamp.c \
-		  tools/degrees_to_radians.c
+		  tools/degrees_to_radians.c \
+		  brdf/onb.c \
+		  brdf/light_pdf.c \
+		  brdf/operation.c \
+		  brdf/set_brdf.c \
+		  brdf/record.c \
+		  brdf/check_box.c \
+		  brdf/transparent.c \
+		  brdf/lambertian.c \
+		  brdf/mirror.c \
+		  brdf/microfacet.c \
+		  trace/trace.c \
 
 
 SRCS_B	=

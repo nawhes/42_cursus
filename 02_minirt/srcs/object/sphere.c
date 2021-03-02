@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 22:20:39 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/21 00:27:14 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/02 08:08:38 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void		get_sphere_uv(t_vec3 p, double *u, double *v)
 	*v = theta / PI;
 }
 
-int			sphere_hit(t_object ob, t_ray r, t_hit_record *rec)
+int			sphere_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 {
 	t_sphere	info = *(t_sphere *)ob.info;
 	t_vec3	oc;
@@ -36,10 +36,10 @@ int			sphere_hit(t_object ob, t_ray r, t_hit_record *rec)
 	double	root;
 	t_vec3	outward_normal;
 
-	oc = vec3_sub(r.orig, info.coord);
-	a = vec3_length_square(r.dir);
-	half_b = vec3_dot(oc, r.dir);
-	c = vec3_length_square(oc) - info.diameter * info.diameter;
+	oc = v_sub_v(r.orig, info.coord);
+	a = v_length_sq(r.dir);
+	half_b = v_dot(oc, r.dir);
+	c = v_length_sq(oc) - info.diameter * info.diameter;
 	discriminant = half_b * half_b - a * c;
 	if (discriminant < 0)
 		return (0);
@@ -51,13 +51,11 @@ int			sphere_hit(t_object ob, t_ray r, t_hit_record *rec)
 		if (root < rec->t_min || root > rec->t_max)
 			return (0);
 	}
-	rec->t = root;
-	rec->p = ray_at(r, rec->t);
-	rec->t_max = rec->t;
-	outward_normal = vec3_div(vec3_sub(rec->p, info.coord), info.diameter);
-	rec->set_face_normal(rec, r, &outward_normal);
+	rec->t_max = root;
+	outward_normal = v_div(v_sub_v(ray_at(r, root), info.coord), info.diameter);
 	get_sphere_uv(outward_normal, &rec->u, &rec->v);
-
+	set_brdf(brdf, ob, r, outward_normal);
+	set_brdf2(brdf, ray_at(r, root));
 	return (1);
 }
 

@@ -6,13 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 22:20:39 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/21 00:29:17 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/02 08:09:05 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int			xzrect_hit(t_object ob, t_ray r, t_hit_record *rec)
+int			xzrect_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 {
 	t_xzrect	info = *((t_xzrect *)ob.info);
 	double	t;
@@ -29,12 +29,11 @@ int			xzrect_hit(t_object ob, t_ray r, t_hit_record *rec)
 		return (0);
 	rec->u = (x - info.x0) / (info.x1 - info.x0);
 	rec->v = (z - info.z0) / (info.z1 - info.z0);
-	rec->t = t;
-	outward_normal = vec3(0, 1, 0);
+	rec->t_max = t;
+	outward_normal = vec(0, 1, 0);
 	
-	rec->p = ray_at(r, rec->t);
-	rec->t_max = rec->t;
-	rec->set_face_normal(rec, r, &outward_normal);
+	set_brdf(brdf, ob, r, outward_normal);
+	set_brdf2(brdf, ray_at(r, t));
 	return (1);
 }
 

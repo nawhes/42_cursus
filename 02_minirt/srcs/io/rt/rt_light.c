@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/28 07:05:02 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/02 08:00:48 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void		rt_light(t_minirt *rt)
 		i++;
 	if (atovec3(rt->line, &i, &sp.rgb))
 		error_handle(-2, rt);
-	sp.rgb = vec3_div(sp.rgb, 255);
+	sp.rgb = v_div(sp.rgb, 255);
 	//have to check_range
 	while (ft_isspace(*(rt->line + i)))
 		i++;
