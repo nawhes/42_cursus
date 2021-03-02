@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/28 23:13:15 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/02 09:23:51 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/02 09:37:51 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void		microfacet(t_brdf *brdf)
 	double	per = ps / (ps + pd);
 	if (random_double() < per)
 	{
-		brdf->wi = reflect(v_mul(brdf->wo, -1), brdf->wh);
+		brdf->wi = reflect(brdf->wo, brdf->wh);
 		pdf = (v_mul(v_div(f, per), g1(brdf->attr, clamp0_1(v_dot(brdf->normal, brdf->wi)))));
 	}
 	else

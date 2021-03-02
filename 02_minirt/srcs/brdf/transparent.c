@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/16 00:23:55 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/02 09:13:32 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/02 09:39:39 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ void		transparent(t_brdf *brdf)
 	double	sintheta;
 
 	ior = brdf->front_face ? (1.0 / brdf->attr) : brdf->attr;
-	costheta = fmin(v_dot(brdf->wo, brdf->normal), 1.0);
+	costheta = fmin(v_dot(v_inv(brdf->wo), brdf->normal), 1.0);
 	sintheta = sqrt(1.0 - costheta * costheta);
 
 	if (ior * sintheta > 1.0 || ior2fresnel(costheta, ior) > random_double())
-		brdf->wi = reflect(v_mul(brdf->wo, -1), brdf->normal);
+		brdf->wi = reflect(brdf->wo, brdf->normal);
 	else
-		brdf->wi = refract(v_mul(brdf->wo, -1), brdf->normal, ior);
+		brdf->wi = refract(brdf->wo, brdf->normal, ior);
 
 	brdf->attenuation = v_mul(vec3(1), 0.91339);
 	brdf->ray = ray(brdf->point, brdf->wi);

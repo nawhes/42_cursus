@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 03:30:30 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/02 09:25:18 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/02 09:33:47 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ static t_vec3	get_albedo(t_brdf *brdf, t_object ob)
 	
 static t_vec3	set_face_normal(t_brdf *brdf, t_vec3 outward_normal)
 {
-	brdf->front_face = v_dot(brdf->wo, outward_normal) > 0;
+	brdf->front_face = v_dot(brdf->wo, outward_normal) < 0;
 	if (brdf->front_face)
 		return (outward_normal);
 	else
-		return (v_normalize(v_mul(outward_normal, -1.0)));
+		return (v_normalize(v_inv(outward_normal)));
 }
 
 static double	get_attr(t_object ob)
