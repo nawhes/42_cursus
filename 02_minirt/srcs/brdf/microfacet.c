@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/28 23:13:15 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/02 09:37:51 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/05 13:38:04 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static t_vec3		random_microfacet_direction(double roughness)
 	double	a2 = roughness * roughness;
 
 	double	theta = acos(sqrt((1.0 - r1) / ((a2 - 1.0) * r1 + 1.0)));
-	double	phi = 2 * PI * r2;
+	double	phi = 2 * M_PI * r2;
 	double	x = sin(theta) * cos(phi);
 	double	y = sin(theta) * sin(phi);
 	double	z = cos(theta);
@@ -36,7 +36,7 @@ double		ggx2(double roughness, double costheta)
 {
 	double	a2 = roughness * roughness;
 	double	exp = (a2 - 1.0) * costheta * costheta + 1.0;
-	return (a2 / (PI * exp * exp));
+	return (a2 / (M_PI * exp * exp));
 }
 
 double		v1(double roughness, double ndotx)

@@ -6,7 +6,7 @@
 #    By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/01 05:08:59 by sehpark           #+#    #+#              #
-#    Updated: 2021/03/02 08:45:08 by sehpark          ###   ########.fr        #
+#    Updated: 2021/03/06 05:25:18 by sehpark          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,20 +48,29 @@ SRCS	= minirt.c \
 		  io/rt/rt_ambientlight.c \
 		  io/rt/rt_camera.c \
 		  io/rt/rt_light.c \
+		  io/rt/rt_cylinder.c \
+		  io/rt/rt_plane.c \
+		  io/rt/rt_triangle.c \
+		  io/rt/rt_rect.c \
 		  io/rt/rt_xyrect.c \
 		  io/rt/rt_xzrect.c \
 		  io/rt/rt_yzrect.c \
 		  io/rt/rt_resolution.c \
 		  io/rt/rt_sphere.c \
+		  io/rt/rt_square.c \
 		  io/rt/tools/atovec3.c \
 		  io/rt/tools/check_atof_parameter.c \
 		  io/rt/tools/check_atoi_parameter.c \
 		  io/rt/tools/next.c \
 		  vector/operations.c \
 		  viewport/viewport.c \
-		  viewport/ray.c \
 		  object/object.c \
+		  object/cylinder.c \
 		  object/sphere.c \
+		  object/square.c \
+		  object/plane.c \
+		  object/triangle.c \
+		  object/rect.c \
 		  object/xyrect.c \
 		  object/xzrect.c \
 		  object/yzrect.c \
@@ -82,6 +91,7 @@ SRCS	= minirt.c \
 		  brdf/mirror.c \
 		  brdf/microfacet.c \
 		  trace/trace.c \
+		  trace/ray.c \
 
 
 SRCS_B	=

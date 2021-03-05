@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 01:55:46 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/18 04:45:15 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/05 15:56:10 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,26 +21,28 @@ static void	parse_rt(t_minirt *rt)
 		rt_resolution(rt);
 	else if (*rt->line == 'A')
 		rt_ambientlight(rt);
-	else if (*rt->line == 'c')
-		rt_camera(rt);
 	else if (*rt->line == 'l')
 		rt_light(rt);
 	else if (*rt->line == 's' && *(rt->line + 1) == 'p')
 		rt_sphere(rt);
-/*
-	else if (*rt->line == 'p' || *(rt->line + 1) == 'l')
+	else if (*rt->line == 'p' && *(rt->line + 1) == 'l')
 		rt_plane(rt);
-	else if (*rt->line == 'c' || *(rt->line + 1) == 'y')
+	else if (*rt->line == 's' && *(rt->line + 1) == 'q')
+		rt_square(rt);
+	else if (*rt->line == 'c' && *(rt->line + 1) == 'y')
 		rt_cylinder(rt);
-	else if (*rt->line == 't' || *(rt->line + 1) == 'r')
+	else if (*rt->line == 't' && *(rt->line + 1) == 'r')
 		rt_triangle(rt);
-*/
+	else if (*rt->line == 'r' && *(rt->line + 1) == 't')
+		rt_rect(rt);
 	else if (*rt->line == 'x' && *(rt->line + 1) == 'y')
 		rt_xyrect(rt);
 	else if (*rt->line == 'x' && *(rt->line + 1) == 'z')
 		rt_xzrect(rt);
 	else if (*rt->line == 'y' && *(rt->line + 1) == 'z')
 		rt_yzrect(rt);
+	else if (*rt->line == 'c')
+		rt_camera(rt);
 	else if (*rt->line == '#' || *rt->line == '\0')
 		return ;
 	else

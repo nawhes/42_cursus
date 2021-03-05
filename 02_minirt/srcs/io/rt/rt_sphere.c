@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/02 08:02:01 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/06 05:12:19 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,9 @@ void		rt_sphere(t_minirt *rt)
 		error_handle(-2, rt);
 	while (ft_isspace(*(rt->line + i)))
 		i++;
-	if (check_atof_parameter(rt->line, &i, &sp.diameter))
+	if (check_atof_parameter(rt->line, &i, &sp.radius))
 		error_handle(-2, rt);
+	sp.radius = sp.radius / 2;
 	//have to check_range
 	while (ft_isspace(*(rt->line + i)))
 		i++;

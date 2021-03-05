@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 07:54:32 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/02 08:51:18 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/06 05:26:37 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static t_vec3	random_to_sphere(double radius, double distance_squared)
 	double	r2 = random_double();
 	double	z = 1 + r2 * (sqrt(1 - radius * radius / distance_squared) - 1);
 
-	double	phi = 2 * PI * r1;
+	double	phi = 2 * M_PI * r1;
 	double	x = cos(phi) * sqrt(1 - z * z);
 	double	y = sin(phi) * sqrt(1 - z * z);
 
@@ -51,5 +51,5 @@ t_vec3		sphere_random(t_sphere *sp, t_vec3 o)
 	double	distance_squared = v_length_sq(direction);
 	t_onb	uvw;
 	uvw = onb_build_from_w(direction);
-	return (onb_local(uvw, random_to_sphere(sp->diameter, distance_squared)));
+	return (onb_local(uvw, random_to_sphere(sp->radius, distance_squared)));
 }

@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/29 22:52:31 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/02 08:04:53 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/04 20:02:34 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static void		set_viewport(t_viewport *node, t_viewport this)
 
 	viewport[0] = 2.0 * tan(degrees_to_radians(this.vfov) / 2);
 	viewport[1] = viewport[0] / this.aspect_ratio;
+	this.lookat = v_normalize(this.lookat);
 	if (this.lookat.y == 1)
 		u = vec(1, 0, 0);
 	else if (this.lookat.y == -1)

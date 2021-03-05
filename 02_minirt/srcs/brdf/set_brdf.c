@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 03:30:30 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/02 09:33:47 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/06 03:51:45 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,14 @@ static t_vec3	get_albedo(t_brdf *brdf, t_object ob)
 		albedo = ((t_xzrect *)ob.info)->rgb;
 	else if (ob.type == OB_YZRECT)
 		albedo = ((t_yzrect *)ob.info)->rgb;
+	else if (ob.type == OB_PLANE)
+		albedo = ((t_plane *)ob.info)->rgb;
+	else if (ob.type == OB_SQUARE)
+		albedo = ((t_square *)ob.info)->rgb;
+	else if (ob.type == OB_CYLINDER)
+		albedo = ((t_cylinder *)ob.info)->rgb;
+	else if (ob.type == OB_TRIANGLE)
+		albedo = ((t_triangle *)ob.info)->rgb;
 	else
 		albedo = vec3(1);
 	if (ob.texture == MICROFACET_NON_METAL)
