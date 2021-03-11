@@ -6,13 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 11:22:20 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/05 13:30:50 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/06 06:21:54 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static int	is_in(t_vec3 center_to_p, t_rect info)
+static int	intersection_rect(t_vec3 center_to_p, t_rect info)
 {
 	t_onb	uvw;
 	double	costheta_width;
@@ -44,7 +44,7 @@ int			rect_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 	t = (v_dot(info.normal, v_sub_v(info.coord, r.orig))) / ndotdir;
 	if (t < rec->t_min || t > rec->t_max)
 		return (0);
-	if (!is_in(v_sub_v(info.coord, ray_at(r, t)), info))
+	if (!intersection_rect(v_sub_v(info.coord, ray_at(r, t)), info))
 		return (0);
 	rec->t_max = t;
 	set_brdf(brdf, ob, r, info.normal);

@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/18 04:47:40 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/08 18:02:06 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,9 @@ void		rt_camera(t_minirt *rt)
 	//have to check_range
 	while (ft_isspace(*(rt->line + i)))
 		i++;
-	vp.aspect_ratio = (double)rt->r_x / (double)rt->r_y;
-	while (ft_isspace(*(rt->line + i)))
-		i++;
 	if (*(rt->line + i) != '\0')
 		error_handle(-2, rt);
+
 	if (!(p_node = viewport_node(vp)))
 		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_viewport), p_node);

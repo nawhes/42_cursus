@@ -6,50 +6,52 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/29 22:52:31 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/04 20:02:34 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/08 18:09:24 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include <math.h>
 
-t_ray			viewport_get_ray(t_viewport vp, double s, double t)
+t_ray			viewport_get_ray(t_viewport *vp, double s, double t)
 {
 	t_vec3		dir;
 	
-	dir = vp.lower_left_corner;
-	dir = v_add_v(dir, v_mul(vp.horizontal, s));
-	dir = v_add_v(dir, v_mul(vp.vertical, t));
-	dir = v_sub_v(dir, vp.origin);
-	return (ray(vp.origin, dir));
+	dir = vp->upper_left_corner;
+	dir = v_add_v(dir, v_mul(vp->horizontal, s));
+	dir = v_sub_v(dir, v_mul(vp->vertical, t));
+	dir = v_sub_v(dir, vp->origin);
+	return (ray(vp->origin, dir));
 }
 
-static void		set_viewport(t_viewport *node, t_viewport this)
+static void		vp_set_viewport(t_viewport *vp, t_minirt *rt)
 {
 	double		viewport[2];
 	t_vec3		u;
 	t_vec3		v;
 	t_vec3		tmp;
+	double		aspect_ratio;
 
-	viewport[0] = 2.0 * tan(degrees_to_radians(this.vfov) / 2);
-	viewport[1] = viewport[0] / this.aspect_ratio;
-	this.lookat = v_normalize(this.lookat);
-	if (this.lookat.y == 1)
+	aspect_ratio = (double)rt->r_x / (double)rt->r_y;
+	viewport[0] = 2.0 * tan(degrees_to_radians(vp->vfov) / 2);
+	viewport[1] = viewport[0] / aspect_ratio;
+	vp->lookat = v_normalize(vp->lookat);
+	if (vp->lookat.y == 1)
 		u = vec(1, 0, 0);
-	else if (this.lookat.y == -1)
+	else if (vp->lookat.y == -1)
 		u = vec(-1, 0, 0);
 	else
-		u = v_cross(vec(0, 1, 0), this.lookat);
-	v = v_cross(this.lookat, u);
-	node->origin = this.lookfrom;
-	node->horizontal = v_mul(u, viewport[0]);
-	node->vertical = v_mul(v, viewport[1]);
-	tmp = node->origin;
-	tmp = v_sub_v(tmp, v_div(node->horizontal, 2));
-	tmp = v_sub_v(tmp, v_div(node->vertical, 2));
-	tmp = v_sub_v(tmp, this.lookat);
-	node->lower_left_corner = tmp;
-	node->get_ray = viewport_get_ray;
+		u = v_cross(vec(0, 1, 0), vp->lookat);
+	v = v_cross(vp->lookat, u);
+	vp->origin = vp->lookfrom;
+	vp->horizontal = v_mul(u, viewport[0]);
+	vp->vertical = v_mul(v, viewport[1]);
+	tmp = vp->origin;
+	tmp = v_sub_v(tmp, v_div(vp->horizontal, 2));
+	tmp = v_add_v(tmp, v_div(vp->vertical, 2));
+	tmp = v_sub_v(tmp, vp->lookat);
+	vp->upper_left_corner = tmp;
+	vp->get_ray = viewport_get_ray;
 }
 
 t_viewport		*viewport(t_viewport this)
@@ -58,6 +60,9 @@ t_viewport		*viewport(t_viewport this)
 
 	if (!(node = malloc(sizeof(t_viewport))))
 		return (NULL);
-	set_viewport(node, this);
+	node->lookfrom = this.lookfrom;
+	node->lookat = this.lookat;
+	node->vfov = this.vfov;
+	node->set_viewport = vp_set_viewport;
 	return (node);
 }

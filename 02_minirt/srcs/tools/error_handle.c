@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 07:20:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/02/18 04:53:22 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/07 18:46:50 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,10 @@ static void	free_light_info(void *ob)
 
 static void	free_image_rgb(void *img)
 {
-	int		i;
 	t_image	*tmp;
-
-	i = 0;
+	
 	tmp = (t_image *)img;
-	while (i < tmp->width)
-	{
-		free((tmp->rgb) + i);
-		i++;
-	}
-	free(tmp->rgb);
+	free(tmp->rgba);
 	return ;
 }
 

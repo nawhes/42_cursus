@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 21:28:27 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/06 05:22:04 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/08 18:44:16 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,24 @@
 # define STRUCT_H
 
 # include "libft.h"
+
+union		u_rgba
+{
+	char	rgb[3];
+	char	rgba[4];
+	int		color;
+};
+
+typedef struct		s_mlx
+{
+	void			*mlx;
+	void			*win;
+	void			*img;
+	char			*addr;
+	int				bit_per_pixel;
+	int				size_line;
+	int				endian;
+}					t_mlx;
 
 typedef	struct		s_vec3
 {
@@ -27,6 +45,22 @@ typedef struct		s_ray
 	t_vec3			orig;
 	t_vec3			dir;
 }					t_ray;
+
+typedef struct		s_minirt
+{
+	int				r_x;
+	int				r_y;
+	int				pixel;
+	double			ambient_ratio;
+	t_vec3			ambient_rgb;
+	char			*line;
+	t_list			*p_viewport;
+	t_list			*p_object;
+	t_list			*p_light;
+	t_list			*p_image;
+	t_list			*p_image_iter;
+	t_mlx			*p_mlx;
+}					t_minirt;
 
 typedef struct		s_onb
 {
@@ -64,19 +98,17 @@ typedef struct		s_viewport
 	t_vec3			lookfrom;
 	t_vec3			lookat;
 	double			vfov;
-	double			aspect_ratio;
 	t_vec3			origin;
 	t_vec3			horizontal;
 	t_vec3			vertical;
-	t_vec3			lower_left_corner;
-	t_ray			(*get_ray)(struct s_viewport viewport, double s, double t);
+	t_vec3			upper_left_corner;
+	t_ray			(*get_ray)(struct s_viewport *vp, double s, double t);
+	void			(*set_viewport)(struct s_viewport *vp, struct s_minirt *rt);
 }					t_viewport;
 
 typedef struct		s_image
 {
-	int				width;
-	int				height;
-	int				**rgb;
+	int				*rgba;
 }					t_image;
 
 typedef struct		s_info
@@ -88,12 +120,24 @@ typedef struct		s_info
 	int				endian;
 }					t_info;
 
-typedef struct		s_output
+typedef struct		s_bmp
 {
-	void			*mlx;
-	void			*win;
-	t_info			*info;
-}					t_output;
+	int8_t			bf_type[2];
+	int32_t			bf_size;
+	int32_t			bf_reserved;
+	int32_t			bf_offbits;
+	int32_t			bi_size;
+	int32_t			bi_width;
+	int32_t			bi_height;
+	int16_t			bi_planes;
+	int16_t			bi_bitcount;
+	int32_t			bi_compression;
+	int32_t			bi_sizeimage;
+	int32_t			bi_xpelspermeter;
+	int32_t			bi_ypelspermeter;
+	int32_t			bi_clrused;
+	int32_t			bi_clrimportant;
+}					t_bmp;
 
 /*
 ** Objects
@@ -200,18 +244,5 @@ typedef struct		s_triangle
 	t_vec3			point3;
 	t_vec3			rgb;
 }					t_triangle;
-
-typedef struct		s_minirt
-{
-	int				r_x;
-	int				r_y;
-	double			ambient_ratio;
-	t_vec3			ambient_rgb;
-	char			*line;
-	t_list			*p_viewport;
-	t_list			*p_object;
-	t_list			*p_light;
-	t_list			*p_image;
-}					t_minirt;
 
 #endif

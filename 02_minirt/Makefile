@@ -6,7 +6,7 @@
 #    By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/01 05:08:59 by sehpark           #+#    #+#              #
-#    Updated: 2021/03/06 05:25:18 by sehpark          ###   ########.fr        #
+#    Updated: 2021/03/11 15:31:13 by sehpark          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,13 +21,11 @@ YELLOW	= \033[33m
 
 #-------------------------------- MISCELANEOUS --------------------------------#
 
-CC		= clang
+CC		= gcc
 CFLAGS	= -Wall -Wextra -Werror
 AR		= ar rcs
-MLXFLAGS= -lm -lXext -lX11 -lbsd
 
 INCS	= -I ./includes/
-INCS_MLX= -I ./minilibx-linux/
 
 SRC		= ./srcs/
 
@@ -39,12 +37,14 @@ OBJS_B	= $(addprefix $(SRC), $(SRCS_B:.c=.o))
 #----------------------------------- FILES ------------------------------------#
 
 LFT		= libft/libft.a
-LMLX	= minilibx-linux/libmlx.a
+LINK	= -L libft -lft -L minilibx-linux -l mlx -lm -lXext -lX11 -lbsd
 
 SRCS	= minirt.c \
 		  io/get_next_line.c \
 		  io/read_rt.c \
-		  io/output.c \
+		  io/mlx.c \
+		  io/export_bmp.c \
+		  io/print_window.c \
 		  io/rt/rt_ambientlight.c \
 		  io/rt/rt_camera.c \
 		  io/rt/rt_light.c \
@@ -58,10 +58,10 @@ SRCS	= minirt.c \
 		  io/rt/rt_resolution.c \
 		  io/rt/rt_sphere.c \
 		  io/rt/rt_square.c \
-		  io/rt/tools/atovec3.c \
-		  io/rt/tools/check_atof_parameter.c \
-		  io/rt/tools/check_atoi_parameter.c \
-		  io/rt/tools/next.c \
+		  io/tools/atovec3.c \
+		  io/tools/check_atof_parameter.c \
+		  io/tools/check_atoi_parameter.c \
+		  io/tools/next.c \
 		  vector/operations.c \
 		  viewport/viewport.c \
 		  object/object.c \
@@ -93,22 +93,53 @@ SRCS	= minirt.c \
 		  trace/trace.c \
 		  trace/ray.c \
 
-
 SRCS_B	=
 
 #----------------------------------- RULES ------------------------------------#
 
-$(NAME): $(LFT) $(LMLX) $(OBJS)
-	$(CC) -o $(NAME) $(OBJS) $(CFLAGS) $(MLXFLAGS) $(INCS) $(INCS_MLX) $(LMLX) $(LFT) -fsanitize=address
-	
-$(LFT):
-	@$(MAKE) -s -C libft
-
+ifeq ($(OS),Windows_NT)
+    ifeq ($(PROCESSOR_ARCHITEW6432),AMD64)
+    else
+        ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
+        endif
+        ifeq ($(PROCESSOR_ARCHITECTURE),x86)
+        endif
+    endif
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux)
+#linux
+LINK	+= -L minilibx-linux -lmlx -lm -lXext -lX11 -lbsd
+LMLX	= minilibx-linux/libmlx.a
 $(LMLX):
-	@$(MAKE) -s -C minilibx-linux
+	@$(MAKE) -sC minilibx-linux
+
+    endif
+    ifeq ($(UNAME_S),Darwin)
+#mac
+LINK	+= -L minilibx_mmx_20200219 -lmlx -framework OpenGL -framework Appkit
+LMLX	= minilibx_mms_20200219/libmlx.a
+$(LMLX):
+	@$(MAKE) -sC minilibx_mms_20200219
+
+    endif
+    UNAME_P := $(shell uname -p)
+    ifeq ($(UNAME_P),x86_64)
+    endif
+    ifneq ($(filter %86,$(UNAME_P)),)
+    endif
+    ifneq ($(filter arm%,$(UNAME_P)),)
+    endif
+endif
+
+$(NAME): $(LFT) $(LMLX) $(OBJS)
+	$(CC) $(CFLAGS) $(INCS) $(OBJS) $(LINK) -o $(NAME) -fsanitize=address
+
+$(LFT):
+	@$(MAKE) -sC libft
 
 .c.o:
-	$(CC) $(CFLAGS) $(INCS) $(INCS_MLX) -c $< -o $(<:.c=.o)
+	$(CC) $(CFLAGS) $(INCS) -c $< -o $(<:.c=.o)
 
 all: $(NAME)
 
@@ -117,11 +148,13 @@ bonus: $(NAME)
 clean:
 	@$(MAKE) -sC libft clean
 	@$(MAKE) -sC minilibx-linux clean
+	@$(MAKE) -sC minilibx_mms_20200219 clean
 	@rm -f $(OBJS) $(OBJS_B)
 
 fclean: 
 	@$(MAKE) -sC libft fclean
 	@$(MAKE) -sC minilibx-linux clean
+	@$(MAKE) -sC minilibx_mms_20200219 clean
 	@rm -f $(OBJS) $(OBJS_B)
 	@rm -f $(NAME)
 

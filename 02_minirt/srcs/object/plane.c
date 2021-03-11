@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 22:20:39 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/04 16:36:52 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/06 05:49:55 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ int			plane_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 {
 	t_plane	info = *(t_plane *)ob.info;
 	double	t;
-	double	denom;
-	denom = v_dot(info.normal, r.dir);
-	if (denom == 0)
+	double	ndotdir;
+	ndotdir = v_dot(info.normal, r.dir);
+	if (ndotdir == 0)
 		return (0);
-	t = (v_dot(info.normal, v_sub_v(info.coord, r.orig))) / denom;
+	t = (v_dot(info.normal, v_sub_v(info.coord, r.orig))) / ndotdir;
 	if (t < rec->t_min || t > rec->t_max)
 		return (0);
 	rec->t_max = t;

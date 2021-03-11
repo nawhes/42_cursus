@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 04:17:50 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/06 05:24:13 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 14:14:26 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,39 @@
 # include <stdlib.h>
 # include <fcntl.h>
 
-# define	LAMBERTIAN				1
-# define	MIRROR					2
-# define	MICROFACET_METAL		3
-# define	MICROFACET_NON_METAL	4
-# define	TRANSPARENT				5
-# define	CHECK_BOX				6
-# define	DIFFUSE_LIGHT			9
+# define LAMBERTIAN				1
+# define MIRROR					2
+# define MICROFACET_METAL		3
+# define MICROFACET_NON_METAL	4
+# define TRANSPARENT			5
+# define CHECK_BOX				6
+# define DIFFUSE_LIGHT			9
 
-# define	OB_SPHERE				11
-# define	OB_XYRECT				12
-# define	OB_YZRECT				13
-# define	OB_XZRECT				14
-# define	OB_PLANE				15
-# define	OB_SQUARE				16
-# define	OB_CYLINDER				17
-# define	OB_TRIANGLE				18
-# define	OB_RECT					19
+# define OB_SPHERE				11
+# define OB_XYRECT				12
+# define OB_YZRECT				13
+# define OB_XZRECT				14
+# define OB_PLANE				15
+# define OB_SQUARE				16
+# define OB_CYLINDER			17
+# define OB_TRIANGLE			18
+# define OB_RECT				19
 
-# define	SAMPLE_PER_PIXEL		20
-# define	MAX_DEPTH				5
+# define SAMPLE_PER_PIXEL		20
+# define MAX_DEPTH				5
+
+# define ANTIALIAS				1
+# define OUTPUT_DIR				"./images/"
+# define PIXEL_PER_BIT			24
+# define PIXEL_PER_BYTE			3
+
+# ifdef __linux__
+#  define KEY_SPACE				32
+#  define KEY_ESCAPE			65307
+# else
+#  define KEY_SPACE				49
+#  define KEY_ESCAPE			53
+# endif
 
 /*
 ** ray trace
@@ -55,8 +68,10 @@ t_vec3		trace(t_ray r, t_minirt *rt, int depth);
 */
 
 int			read_rt(const char *filename, t_minirt *rt);
-t_output	*output(const char *title, t_minirt *rt);
-int			output_print(t_output *out, t_minirt *rt);
+t_mlx		*mlx(t_minirt *rt);
+int			draw_mlx(t_mlx *mlx, t_minirt *rt, t_image *p_image);
+void		print_window(char *title, t_minirt *rt);
+void		export_bmp(const char *filename, t_minirt *rt);
 
 /*
 ** rt
@@ -146,8 +161,8 @@ t_viewport	*viewport(t_viewport this);
 ** image
 */
 
-t_image		*image(int width, int height);
-void		image_render(t_minirt *rt);
+t_image		*image(t_minirt *rt);
+void		render(t_minirt *rt);
 
 /*
 ** tools
