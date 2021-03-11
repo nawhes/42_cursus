@@ -4,6 +4,3 @@
 [submodule "libft"]
 	path = 02_minirt/libft
 	url = https://github.com/nawhes/libft
-[submodule "minilibx_linux"]
-	path = 02_minirt/minilibx-linux
-	url = https://github.com/42Paris/minilibx-linux
