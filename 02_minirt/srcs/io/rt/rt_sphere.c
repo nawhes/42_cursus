@@ -6,13 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 19:52:41 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/13 20:49:34 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static t_list	*sphere_node(t_sphere sp, int material, double attr)
+static t_list	*sphere_node(t_sphere sp, t_ob_info ob_info)
 {
 	t_sphere	*p_sp;
 	t_object	*p_ob;
@@ -20,7 +20,7 @@ static t_list	*sphere_node(t_sphere sp, int material, double attr)
 
 	if (!(p_sp = sphere(sp)))
 		return (NULL);
-	if (!(p_ob = object((void *)p_sp, OB_SPHERE, material, attr)))
+	if (!(p_ob = object((void *)p_sp, OB_SPHERE, ob_info)))
 	{
 		free(p_sp);
 		return (NULL);
@@ -57,15 +57,14 @@ void			rt_sphere(t_minirt *rt)
 {
 	int			i;
 	t_sphere	sp;
-	int			material;
-	double		attr;
+	t_ob_info	ob_info;
 	t_list		*p_node;
 
 	i = 0;
 	skip2(rt->line, &i, 's', 'p');
 	get_sphere(rt, &sp, &i);
-	get_material_attr(rt, &i, &material, &attr);
-	if (!(p_node = sphere_node(sp, material, attr)))
+	get_ob_info(rt, &i, &ob_info);
+	if (!(p_node = sphere_node(sp, ob_info)))
 		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_object), p_node);
 }

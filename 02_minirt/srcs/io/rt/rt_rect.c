@@ -6,13 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 19:55:39 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/13 20:54:35 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static t_list	*rect_node(t_rect rectangle, int material, double attr)
+static t_list	*rect_node(t_rect rectangle, t_ob_info ob_info)
 {
 	t_rect		*p_rectangle;
 	t_object	*p_ob;
@@ -20,7 +20,7 @@ static t_list	*rect_node(t_rect rectangle, int material, double attr)
 
 	if (!(p_rectangle = rect(rectangle)))
 		return (NULL);
-	if (!(p_ob = object((void *)p_rectangle, OB_RECT, material, attr)))
+	if (!(p_ob = object((void *)p_rectangle, OB_RECT, ob_info)))
 	{
 		free(p_rectangle);
 		return (NULL);
@@ -64,15 +64,14 @@ void			rt_rect(t_minirt *rt)
 {
 	int			i;
 	t_rect		rectangle;
-	int			material;
-	double		attr;
+	t_ob_info	ob_info;
 	t_list		*p_node;
 
 	i = 0;
 	skip2(rt->line, &i, 'r', 't');
 	get_rect(rt, &rectangle, &i);
-	get_material_attr(rt, &i, &material, &attr);
-	if (!(p_node = rect_node(rectangle, material, attr)))
+	get_ob_info(rt, &i, &ob_info);
+	if (!(p_node = rect_node(rectangle, ob_info)))
 		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_object), p_node);
 }

@@ -6,13 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 19:55:29 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/13 20:50:57 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static t_list	*triangle_node(t_triangle tri, int material, double attr)
+static t_list	*triangle_node(t_triangle tri, t_ob_info ob_info)
 {
 	t_triangle	*p_tri;
 	t_object	*p_ob;
@@ -20,7 +20,7 @@ static t_list	*triangle_node(t_triangle tri, int material, double attr)
 
 	if (!(p_tri = triangle(tri)))
 		return (NULL);
-	if (!(p_ob = object((void *)p_tri, OB_TRIANGLE, material, attr)))
+	if (!(p_ob = object((void *)p_tri, OB_TRIANGLE, ob_info)))
 	{
 		free(p_tri);
 		return (NULL);
@@ -57,15 +57,14 @@ void			rt_triangle(t_minirt *rt)
 {
 	int			i;
 	t_triangle	tri;
-	int			material;
-	double		attr;
+	t_ob_info	ob_info;
 	t_list		*p_node;
 
 	i = 0;
 	skip2(rt->line, &i, 't', 'r');
 	get_triangle(rt, &tri, &i);
-	get_material_attr(rt, &i, &material, &attr);
-	if (!(p_node = triangle_node(tri, material, attr)))
+	get_ob_info(rt, &i, &ob_info);
+	if (!(p_node = triangle_node(tri, ob_info)))
 		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_object), p_node);
 }

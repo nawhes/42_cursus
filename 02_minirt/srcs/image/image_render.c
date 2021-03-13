@@ -6,35 +6,34 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/29 23:48:59 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 16:32:37 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/13 15:20:58 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static int		correction(t_vec3 color)
+static int		correction(t_vec3 rgb)
 {
 	int			rgba;
 
-	if (color.x != color.x)
-		color.x = 0.0;
-	if (color.y != color.y)
-		color.y = 0.0;
-	if (color.z != color.z)
-		color.z = 0.0;
+	if (rgb.x != rgb.x)
+		rgb.x = 0.0;
+	if (rgb.y != rgb.y)
+		rgb.y = 0.0;
+	if (rgb.z != rgb.z)
+		rgb.z = 0.0;
 	if (ANTIALIAS)
-		color = v_div(color, (double)SAMPLE_PER_PIXEL);
-	color.x = sqrt(color.x);
-	color.y = sqrt(color.y);
-	color.z = sqrt(color.z);
-	rgba = (int)(255.0 * clamp(color.x, 0.0, 0.999));
+		rgb = v_div(rgb, (double)SAMPLE_PER_PIXEL);
+	rgb.x = sqrt(rgb.x);
+	rgb.y = sqrt(rgb.y);
+	rgb.z = sqrt(rgb.z);
+	rgba = (int)(255.0 * clamp(rgb.x, 0.0, 0.999));
 	rgba <<= 8;
-	rgba += (int)(255.0 * clamp(color.y, 0.0, 0.999));
+	rgba += (int)(255.0 * clamp(rgb.y, 0.0, 0.999));
 	rgba <<= 8;
-	rgba += (int)(255.0 * clamp(color.z, 0.0, 0.999));
+	rgba += (int)(255.0 * clamp(rgb.z, 0.0, 0.999));
 	return (rgba);
 }
-
 static t_vec3	antialias(t_minirt *rt, t_viewport *viewport, int i, int j)
 {
 	int			k;
@@ -77,6 +76,7 @@ static void		image_render(t_minirt *rt, t_image *image, t_viewport *viewport)
 			ray = viewport->get_ray(viewport, (double)x, (double)y);
 			rgb = trace(ray, rt, MAX_DEPTH);
 		}
+		image_filter(&rgb, i, rt->r_x, rt->r_y);
 		image->rgba[i] = correction(rgb);
 		i++;
 		if (i % rt->r_x == 0)

@@ -6,7 +6,7 @@
 #    By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/01 05:08:59 by sehpark           #+#    #+#              #
-#    Updated: 2021/03/11 22:45:42 by sehpark          ###   ########.fr        #
+#    Updated: 2021/03/14 02:41:02 by sehpark          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,12 +58,14 @@ SRCS	= minirt.c \
 		  io/rt/rt_resolution.c \
 		  io/rt/rt_sphere.c \
 		  io/rt/rt_square.c \
+		  io/rt/rt_cube.c \
+		  io/rt/rt_pyramid.c \
 		  io/tools/atovec3.c \
 		  io/tools/check_atof_parameter.c \
 		  io/tools/check_atoi_parameter.c \
 		  io/tools/check_range.c \
 		  io/tools/skip.c \
-		  io/tools/get_material_attr.c \
+		  io/tools/get_ob_info.c \
 		  vector/operation_random.c \
 		  vector/operations.c \
 		  vector/operations2.c \
@@ -82,6 +84,7 @@ SRCS	= minirt.c \
 		  object/yzrect.c \
 		  image/image.c \
 		  image/image_render.c \
+		  image/image_filter.c \
 		  tools/error_handle.c \
 		  tools/random.c \
 		  tools/clamp.c \
@@ -93,13 +96,13 @@ SRCS	= minirt.c \
 		  brdf/operation2.c \
 		  brdf/set_brdf.c \
 		  brdf/record.c \
-		  brdf/check_box.c \
 		  brdf/transparent.c \
 		  brdf/lambertian.c \
 		  brdf/mirror.c \
 		  brdf/microfacet.c \
 		  brdf/microfacet_eval.c \
 		  brdf/microfacet_function.c \
+		  texture/apply_texture.c \
 		  trace/trace.c \
 		  trace/ray.c \
 

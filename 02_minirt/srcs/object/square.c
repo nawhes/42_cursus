@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 11:22:20 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 22:23:19 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/14 02:09:59 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int				square_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 	if (!intersection_sq(v_sub_v(info.coord, ray_at(r, t)), info))
 		return (0);
 	rec->t_max = t;
-	set_brdf(brdf, ob, r, info.normal);
-	set_brdf2(brdf, ray_at(r, t), info.rgb);
+	set_brdf(brdf, r, info.normal, ray_at(r, t));
+	set_brdf2(brdf, ob, info.rgb);
 	return (1);
 }
 

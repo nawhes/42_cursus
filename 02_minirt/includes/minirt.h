@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 04:17:50 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 23:59:20 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/14 02:24:47 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@
 # define MICROFACET_METAL		3
 # define MICROFACET_NON_METAL	4
 # define TRANSPARENT			5
-# define CHECK_BOX				6
-# define DIFFUSE_LIGHT			7
+# define DIFFUSE_LIGHT			6
 
 # define OB_SPHERE				11
 # define OB_XYRECT				12
@@ -39,8 +38,18 @@
 # define OB_TRIANGLE			18
 # define OB_RECT				19
 
+# define TX_NONE				0
+# define TX_CHECK_BOX			1
+# define TX_RAINBOW				2
+# define TX_WAVE				3
+
 # define SAMPLE_PER_PIXEL		20
 # define MAX_DEPTH				5
+
+# define SEPIA_FILTER			0
+# define RGB_FILTER				0
+# define INVERT_FILTER			0
+# define GRAYSCALE_FILTER		0
 
 # define ANTIALIAS				1
 # define OUTPUT_DIR				"./images/"
@@ -90,6 +99,8 @@ void		rt_plane(t_minirt *rt);
 void		rt_square(t_minirt *rt);
 void		rt_cylinder(t_minirt *rt);
 void		rt_triangle(t_minirt *rt);
+void		rt_cube(t_minirt *rt);
+void		rt_pyramid(t_minirt *rt);
 
 int			atovec3(char *line, int *i, t_vec3 *target);
 int			check_atof_parameter(char *param, int *i, double *target);
@@ -100,14 +111,13 @@ void		skip2(char *line, int *i, char c1, char c2);
 int			check_range_int(int a, int min, int max);
 int			check_range_double(double a, double min, double max);
 int			check_range_vec3(t_vec3 a, double min, double max);
-void		get_material_attr(t_minirt *rt, int *i, int *material,
-			double *attr);
+void		get_ob_info(t_minirt *rt, int *i, t_ob_info *ob_info);
 
 /*
 ** object
 */
 
-t_object	*object(void *info, int type, int texture, double attr);
+t_object	*object(void *info, int type, t_ob_info ob_info);
 
 t_sphere	*sphere(t_sphere this);
 int			sphere_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf);
@@ -141,8 +151,8 @@ t_vec3		reflect(t_vec3 v, t_vec3 n);
 t_vec3		refract(t_vec3 uv, t_vec3 n, double etai_over_etat);
 t_vec3		random_cosine_direction(void);
 t_vec3		random_microfacet_direction(double roughness);
-void		set_brdf(t_brdf *brdf, t_object ob, t_ray r, t_vec3 normal);
-void		set_brdf2(t_brdf *brdf, t_vec3 point, t_vec3 rgb);
+void		set_brdf(t_brdf *brdf, t_ray r, t_vec3 normal, t_vec3 point);
+void		set_brdf2(t_brdf *brdf, t_object ob, t_vec3 rgb);
 
 double		fresnel(double costheta, double f0);
 t_vec3		fresnel_vec3(double costheta, t_vec3 f0);
@@ -157,7 +167,8 @@ void		microfacet(t_brdf *brdf);
 t_vec3		microfacet_eval(t_brdf brdf, t_vec3 wi);
 void		mirror(t_brdf *brdf);
 void		transparent(t_brdf *brdf);
-void		check_box(t_brdf *brdf);
+
+void		apply_texture(int texture, t_brdf *brdf);
 
 t_vec3		sphere_random(t_sphere *sp, t_vec3 o);
 double		light_pdf(t_object *p_ob, t_ray r);
@@ -179,6 +190,7 @@ t_viewport	*viewport(t_viewport this);
 
 t_image		*image(t_minirt *rt);
 void		render(t_minirt *rt);
+void		image_filter(t_vec3 *rgb, int i, int r_x, int r_y);
 
 /*
 ** tools

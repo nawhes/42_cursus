@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 05:48:45 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 22:28:55 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/13 20:39:12 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int		(*get_hit_function(int type))(
 	return (NULL);
 }
 
-t_object		*object(void *info, int type, int material, double attr)
+t_object		*object(void *info, int type, t_ob_info ob_info)
 {
 	t_object	*node;
 
@@ -47,8 +47,9 @@ t_object		*object(void *info, int type, int material, double attr)
 		return (NULL);
 	node->info = info;
 	node->type = type;
-	node->material = material;
-	node->attr = attr;
+	node->material = ob_info.material;
+	node->attr = ob_info.attr;
+	node->texture = ob_info.texture;
 	node->hit = get_hit_function(type);
 	return (node);
 }

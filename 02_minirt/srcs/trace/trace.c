@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 08:34:40 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 23:57:40 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/13 20:54:58 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static t_vec3		measure_light(t_brdf *brdf, t_object *p_ob, t_vec3 wi)
 	li = v_mul(((t_sphere *)p_ob->info)->rgb, p_ob->attr);
 	pdf = light_pdf(p_ob, ray(brdf->point, wi));
 	li = v_div(li, pdf);
-	if (brdf->material == LAMBERTIAN || brdf->material == CHECK_BOX)
+	if (brdf->material == LAMBERTIAN)
 		tmp = lambert_eval(*brdf, wi);
 	else
 		tmp = microfacet_eval(*brdf, wi);
@@ -93,25 +93,16 @@ static t_vec3		brdf_sample_eval(t_minirt *rt, t_brdf *brdf)
 
 	color = vec3(0);
 	if (brdf->material == LAMBERTIAN)
-	{
 		lambertian(brdf);
-		color = direct_light(rt, brdf);
-	}
 	if (brdf->material == MICROFACET_NON_METAL ||
 			brdf->material == MICROFACET_METAL)
-	{
 		microfacet(brdf);
-		color = direct_light(rt, brdf);
-	}
 	if (brdf->material == MIRROR)
 		mirror(brdf);
 	if (brdf->material == TRANSPARENT)
 		transparent(brdf);
-	if (brdf->material == CHECK_BOX)
-	{
-		check_box(brdf);
+	if (brdf->material != MIRROR && brdf->material != TRANSPARENT)
 		color = direct_light(rt, brdf);
-	}
 	return (color);
 }
 

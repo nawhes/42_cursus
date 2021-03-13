@@ -6,13 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 19:51:57 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/13 20:51:40 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static t_list	*xyrect_node(t_xyrect rectangle, int material, double attr)
+static t_list	*xyrect_node(t_xyrect rectangle, t_ob_info ob_info)
 {
 	t_xyrect	*p_rect;
 	t_object	*p_ob;
@@ -20,7 +20,7 @@ static t_list	*xyrect_node(t_xyrect rectangle, int material, double attr)
 
 	if (!(p_rect = xyrect(rectangle)))
 		return (NULL);
-	if (!(p_ob = object((void *)p_rect, OB_XYRECT, material, attr)))
+	if (!(p_ob = object((void *)p_rect, OB_XYRECT, ob_info)))
 	{
 		free(p_rect);
 		return (NULL);
@@ -63,15 +63,14 @@ void			rt_xyrect(t_minirt *rt)
 {
 	int			i;
 	t_xyrect	rectangle;
+	t_ob_info	ob_info;
 	t_list		*p_node;
-	int			material;
-	double		attr;
 
 	i = 0;
 	skip2(rt->line, &i, 'x', 'y');
 	get_xyrect(rt, &rectangle, &i);
-	get_material_attr(rt, &i, &material, &attr);
-	if (!(p_node = xyrect_node(rectangle, material, attr)))
+	get_ob_info(rt, &i, &ob_info);
+	if (!(p_node = xyrect_node(rectangle, ob_info)))
 		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_object), p_node);
 }

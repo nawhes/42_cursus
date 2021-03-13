@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 22:20:39 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 22:34:41 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/13 21:22:07 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ int				plane_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 	if (t < rec->t_min || t > rec->t_max)
 		return (0);
 	rec->t_max = t;
-	set_brdf(brdf, ob, r, info.normal);
-	set_brdf2(brdf, ray_at(r, t), info.rgb);
+	set_brdf(brdf, r, info.normal, ray_at(r, t));
+	set_brdf2(brdf, ob, info.rgb);
 	return (1);
 }
 

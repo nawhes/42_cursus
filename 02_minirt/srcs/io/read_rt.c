@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/23 01:55:46 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 20:03:55 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/14 02:25:17 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@ static void		parse_rt2(t_minirt *rt)
 		rt_xzrect(rt);
 	else if (*rt->line == 'y' && *(rt->line + 1) == 'z')
 		rt_yzrect(rt);
+	else if (*rt->line == 'c' && *(rt->line + 1) == 'u')
+		rt_cube(rt);
+	else if (*rt->line == 'p' && *(rt->line + 1) == 'y')
+		rt_pyramid(rt);
 	else if (*rt->line == 'c')
 		rt_camera(rt);
 	else if (*rt->line == '#' || *rt->line == '\0')

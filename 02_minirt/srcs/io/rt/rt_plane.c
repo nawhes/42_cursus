@@ -6,13 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 19:53:10 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/13 20:54:18 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static t_list	*plane_node(t_plane pl, int material, double attr)
+static t_list	*plane_node(t_plane pl, t_ob_info ob_info)
 {
 	t_plane		*p_pl;
 	t_object	*p_ob;
@@ -20,7 +20,7 @@ static t_list	*plane_node(t_plane pl, int material, double attr)
 
 	if (!(p_pl = plane(pl)))
 		return (NULL);
-	if (!(p_ob = object((void *)p_pl, OB_PLANE, material, attr)))
+	if (!(p_ob = object((void *)p_pl, OB_PLANE, ob_info)))
 	{
 		free(p_pl);
 		return (NULL);
@@ -54,15 +54,14 @@ void			rt_plane(t_minirt *rt)
 {
 	int			i;
 	t_plane		pl;
-	int			material;
-	double		attr;
+	t_ob_info	ob_info;
 	t_list		*p_node;
 
 	i = 0;
 	skip2(rt->line, &i, 'p', 'l');
 	get_plane(rt, &pl, &i);
-	get_material_attr(rt, &i, &material, &attr);
-	if (!(p_node = plane_node(pl, material, attr)))
+	get_ob_info(rt, &i, &ob_info);
+	if (!(p_node = plane_node(pl, ob_info)))
 		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_object), p_node);
 }

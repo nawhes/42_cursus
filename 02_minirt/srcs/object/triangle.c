@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 11:22:20 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 22:36:42 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/13 21:22:58 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int				triangle_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 	if (!intersection_tr(info, ray_at(r, t), normal))
 		return (0);
 	rec->t_max = t;
-	set_brdf(brdf, ob, r, normal);
-	set_brdf2(brdf, ray_at(r, t), info.rgb);
+	set_brdf(brdf, r, normal, ray_at(r, t));
+	set_brdf2(brdf, ob, info.rgb);
 	return (1);
 }
 

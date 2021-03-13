@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 22:20:39 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 22:30:25 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/13 21:20:20 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ int				sphere_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 	rec->t_max = t;
 	outward_normal = v_div(v_sub_v(ray_at(r, t), info.coord), info.radius);
 	get_sphere_uv(outward_normal, &rec->u, &rec->v);
-	set_brdf(brdf, ob, r, outward_normal);
-	set_brdf2(brdf, ray_at(r, t), info.rgb);
+	set_brdf(brdf, r, outward_normal, ray_at(r, t));
+	set_brdf2(brdf, ob, info.rgb);
 	return (1);
 }
 

@@ -6,13 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 18:48:56 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/13 20:44:08 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static t_list	*cylinder_node(t_cylinder cy, int material, double attr)
+static t_list	*cylinder_node(t_cylinder cy, t_ob_info ob_info)
 {
 	t_cylinder	*p_cy;
 	t_object	*p_ob;
@@ -20,7 +20,7 @@ static t_list	*cylinder_node(t_cylinder cy, int material, double attr)
 
 	if (!(p_cy = cylinder(cy)))
 		return (NULL);
-	if (!(p_ob = object((void *)p_cy, OB_CYLINDER, material, attr)))
+	if (!(p_ob = object((void *)p_cy, OB_CYLINDER, ob_info)))
 	{
 		free(p_cy);
 		return (NULL);
@@ -65,15 +65,14 @@ void			rt_cylinder(t_minirt *rt)
 {
 	int			i;
 	t_cylinder	cy;
-	int			material;
-	double		attr;
+	t_ob_info	ob_info;
 	t_list		*p_node;
 
 	i = 0;
 	skip2(rt->line, &i, 'c', 'y');
 	get_cylinder(rt, &cy, &i);
-	get_material_attr(rt, &i, &material, &attr);
-	if (!(p_node = cylinder_node(cy, material, attr)))
+	get_ob_info(rt, &i, &ob_info);
+	if (!(p_node = cylinder_node(cy, ob_info)))
 		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_object), p_node);
 }

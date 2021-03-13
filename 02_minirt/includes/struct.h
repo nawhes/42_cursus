@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 21:28:27 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 23:58:22 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/14 02:28:53 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ typedef struct		s_record
 typedef struct		s_brdf
 {
 	int				material;
+	int				texture;
 	double			attr;
 	t_vec3			albedo;
 	int				front_face;
@@ -164,10 +165,18 @@ typedef struct		s_object
 	void			*info;
 	int				type;
 	int				material;
+	int				texture;
 	double			attr;
 	int				(*hit)(struct s_object ob, t_ray r, t_record *rec,
 						t_brdf *brdf);
 }					t_object;
+
+typedef struct		s_ob_info
+{
+	int				material;
+	int				texture;
+	double			attr;
+}					t_ob_info;
 
 typedef struct		s_sphere
 {
@@ -260,5 +269,13 @@ typedef struct		s_triangle
 	t_vec3			point3;
 	t_vec3			rgb;
 }					t_triangle;
+
+typedef struct		s_pyramid
+{
+	t_vec3			coord;
+	double			side_size;
+	double			height;
+	t_vec3			rgb;
+}					t_pyramid;
 
 #endif
