@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 11:22:20 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/06 06:21:54 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 22:30:51 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,11 @@ static int	intersection_rect(t_vec3 center_to_p, t_rect info)
 
 int			rect_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 {
-	t_rect	info = *(t_rect *)ob.info;
+	t_rect	info;
 	double	t;
 	double	ndotdir;
 
+	info = *(t_rect *)ob.info;
 	ndotdir = v_dot(info.normal, r.dir);
 	if (ndotdir == 0)
 		return (0);
@@ -48,7 +49,7 @@ int			rect_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 		return (0);
 	rec->t_max = t;
 	set_brdf(brdf, ob, r, info.normal);
-	set_brdf2(brdf, ray_at(r, t));
+	set_brdf2(brdf, ray_at(r, t), info.rgb);
 	return (1);
 }
 

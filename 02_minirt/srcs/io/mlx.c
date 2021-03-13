@@ -6,20 +6,12 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 05:07:52 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 10:44:30 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/13 14:04:18 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
 #include "mlx.h"
-#include <stdio.h>
-
-union		rgba
-{
-	char	rgb[3];
-	char	rgba[4];
-	int		color;
-};
+#include "minirt.h"
 
 t_mlx			*mlx(t_minirt *rt)
 {
@@ -28,9 +20,9 @@ t_mlx			*mlx(t_minirt *rt)
 	int			y_screen_size;
 
 	if (!(p_mlx = malloc(sizeof(t_mlx))))
-		return (NULL);
+		error_handle(-3, rt);
 	if (!(p_mlx->mlx = mlx_init()))
-		return (NULL);
+		error_handle(-4, rt);
 	mlx_get_screen_size(p_mlx->mlx, &x_screen_size, &y_screen_size);
 	rt->r_x = rt->r_x < x_screen_size ? rt->r_x : x_screen_size;
 	rt->r_y = rt->r_y < y_screen_size ? rt->r_y : y_screen_size;
@@ -38,12 +30,12 @@ t_mlx			*mlx(t_minirt *rt)
 	return (p_mlx);
 }
 
-int			draw_mlx(t_mlx *mlx, t_minirt *rt, t_image *p_img)
+int				draw_mlx(t_mlx *mlx, t_minirt *rt, t_image *p_img)
 {
-	int		i;
-	int		j;
-	int		next;
-	union rgba	rgba;
+	int			i;
+	int			j;
+	int			next;
+	t_rgba		rgba;
 
 	i = 0;
 	while (i < rt->r_y)

@@ -6,13 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/06 05:12:47 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 18:48:56 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static t_list	*cylinder_node(t_cylinder cy, int texture, double attr)
+static t_list	*cylinder_node(t_cylinder cy, int material, double attr)
 {
 	t_cylinder	*p_cy;
 	t_object	*p_ob;
@@ -20,7 +20,7 @@ static t_list	*cylinder_node(t_cylinder cy, int texture, double attr)
 
 	if (!(p_cy = cylinder(cy)))
 		return (NULL);
-	if (!(p_ob = object((void *)p_cy, OB_CYLINDER, texture, attr)))
+	if (!(p_ob = object((void *)p_cy, OB_CYLINDER, material, attr)))
 	{
 		free(p_cy);
 		return (NULL);
@@ -34,53 +34,46 @@ static t_list	*cylinder_node(t_cylinder cy, int texture, double attr)
 	return (p_node);
 }
 
+static void		get_cylinder(t_minirt *rt, t_cylinder *cy, int *i)
+{
+	if (atovec3(rt->line, i, &cy->coord))
+		error_handle(-2, rt);
+	skip(rt->line, i);
+	if (atovec3(rt->line, i, &cy->normal))
+		error_handle(-2, rt);
+	skip(rt->line, i);
+	if (check_atof_parameter(rt->line, i, &cy->radius))
+		error_handle(-2, rt);
+	if (check_range_double(cy->radius, 0.001, INFINITY))
+		error_handle(-2, rt);
+	cy->radius = cy->radius / 2.0;
+	skip(rt->line, i);
+	if (check_atof_parameter(rt->line, i, &cy->height))
+		error_handle(-2, rt);
+	if (check_range_double(cy->height, 0.001, INFINITY))
+		error_handle(-2, rt);
+	skip(rt->line, i);
+	if (atovec3(rt->line, i, &cy->rgb))
+		error_handle(-2, rt);
+	if (check_range_vec3(cy->rgb, 0, 255))
+		error_handle(-2, rt);
+	cy->rgb = v_div(cy->rgb, 255);
+	skip(rt->line, i);
+}
+
 void			rt_cylinder(t_minirt *rt)
 {
 	int			i;
 	t_cylinder	cy;
-	int			texture;
+	int			material;
 	double		attr;
 	t_list		*p_node;
 
 	i = 0;
-	while (*(rt->line + i) == 'c' || *(rt->line + i) == 'y' || ft_isspace(*(rt->line + i)))
-		i++;
-	if (atovec3(rt->line, &i, &cy.coord))
-		error_handle(-2, rt);
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (atovec3(rt->line, &i, &cy.normal))
-		error_handle(-2, rt);
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (check_atof_parameter(rt->line, &i, &cy.radius))
-		error_handle(-2, rt);
-	cy.radius = cy.radius / 2;
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (check_atof_parameter(rt->line, &i, &cy.height))
-		error_handle(-2, rt);
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (atovec3(rt->line, &i, &cy.rgb))
-		error_handle(-2, rt);
-	cy.rgb = v_div(cy.rgb, 255);
-	//have to check_range
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (check_atoi_parameter(rt->line, &i, &texture))
-		error_handle(-2, rt);
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (check_atof_parameter(rt->line, &i, &attr))
-		error_handle(-2, rt);
-
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (*(rt->line + i) != '\0')
-		error_handle(-2, rt);
-
-	if (!(p_node = cylinder_node(cy, texture, attr)))
-	error_handle(-3, rt);
+	skip2(rt->line, &i, 'c', 'y');
+	get_cylinder(rt, &cy, &i);
+	get_material_attr(rt, &i, &material, &attr);
+	if (!(p_node = cylinder_node(cy, material, attr)))
+		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_object), p_node);
 }

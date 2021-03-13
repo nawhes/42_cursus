@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 11:22:20 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/06 05:14:39 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 22:36:25 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static int		intersection_cy3(t_cy cy, t_vec3 *normal, double *t)
 {
-	double	ddotn;
-	double	odotn;
-	double	front2;
+	double		ddotn;
+	double		odotn;
+	double		front2;
 
 	ddotn = v_dot(cy.d, cy.normal);
 	odotn = v_dot(cy.o, cy.normal);
@@ -40,11 +40,11 @@ static int		intersection_cy3(t_cy cy, t_vec3 *normal, double *t)
 
 static int		intersection_cy2(t_cy cy, t_vec3 *normal, double *t)
 {
-	double	length_r;
-	double	rdotp;
-	double	pdotp;
-	double	q;
-	double	discriminant;
+	double		length_r;
+	double		rdotp;
+	double		pdotp;
+	double		q;
+	double		discriminant;
 
 	length_r = v_length(cy.r);
 	rdotp = v_dot(cy.r, cy.p);
@@ -59,10 +59,14 @@ static int		intersection_cy2(t_cy cy, t_vec3 *normal, double *t)
 	return (intersection_cy3(cy, normal, t));
 }
 
-static int		intersection_cy(t_ray r_in, t_cylinder info, t_vec3 *normal, double *t)
+static int		intersection_cy(
+		t_ray r_in,
+		t_cylinder info,
+		t_vec3 *normal,
+		double *t)
 {
-	t_vec3	tmp;
-	t_cy	cy;
+	t_vec3		tmp;
+	t_cy		cy;
 
 	cy.top = v_add_v(info.coord, v_mul(info.normal, info.height));
 	cy.bottom = info.coord;
@@ -77,19 +81,20 @@ static int		intersection_cy(t_ray r_in, t_cylinder info, t_vec3 *normal, double 
 	return (intersection_cy2(cy, normal, t));
 }
 
-int			cylinder_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
+int				cylinder_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 {
-	t_cylinder	info = *(t_cylinder *)ob.info;
-	t_vec3	normal;
-	double	t;
+	t_cylinder	info;
+	t_vec3		normal;
+	double		t;
 
+	info = *(t_cylinder *)ob.info;
 	if (!intersection_cy(r, info, &normal, &t))
 		return (0);
 	if (t < rec->t_min || t > rec->t_max)
 		return (0);
 	rec->t_max = t;
 	set_brdf(brdf, ob, r, normal);
-	set_brdf2(brdf, ray_at(r, t));
+	set_brdf2(brdf, ray_at(r, t), info.rgb);
 	return (1);
 }
 

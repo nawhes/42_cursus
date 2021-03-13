@@ -6,13 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/05 14:32:56 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 19:55:29 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static t_list	*triangle_node(t_triangle tri, int texture, double attr)
+static t_list	*triangle_node(t_triangle tri, int material, double attr)
 {
 	t_triangle	*p_tri;
 	t_object	*p_ob;
@@ -20,7 +20,7 @@ static t_list	*triangle_node(t_triangle tri, int texture, double attr)
 
 	if (!(p_tri = triangle(tri)))
 		return (NULL);
-	if (!(p_ob = object((void *)p_tri, OB_TRIANGLE, texture, attr)))
+	if (!(p_ob = object((void *)p_tri, OB_TRIANGLE, material, attr)))
 	{
 		free(p_tri);
 		return (NULL);
@@ -34,48 +34,38 @@ static t_list	*triangle_node(t_triangle tri, int texture, double attr)
 	return (p_node);
 }
 
-void		rt_triangle(t_minirt *rt)
+static void		get_triangle(t_minirt *rt, t_triangle *tri, int *i)
+{
+	if (atovec3(rt->line, i, &tri->point1))
+		error_handle(-2, rt);
+	skip(rt->line, i);
+	if (atovec3(rt->line, i, &tri->point2))
+		error_handle(-2, rt);
+	skip(rt->line, i);
+	if (atovec3(rt->line, i, &tri->point3))
+		error_handle(-2, rt);
+	skip(rt->line, i);
+	if (atovec3(rt->line, i, &tri->rgb))
+		error_handle(-2, rt);
+	if (check_range_vec3(tri->rgb, 0, 255))
+		error_handle(-2, rt);
+	tri->rgb = v_div(tri->rgb, 255);
+	skip(rt->line, i);
+}
+
+void			rt_triangle(t_minirt *rt)
 {
 	int			i;
 	t_triangle	tri;
-	int			texture;
+	int			material;
 	double		attr;
 	t_list		*p_node;
 
 	i = 0;
-	while (*(rt->line + i) == 't' || *(rt->line + i) == 'r' || ft_isspace(*(rt->line + i)))
-		i++;
-	if (atovec3(rt->line, &i, &tri.point1))
-		error_handle(-2, rt);
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (atovec3(rt->line, &i, &tri.point2))
-		error_handle(-2, rt);
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (atovec3(rt->line, &i, &tri.point3))
-		error_handle(-2, rt);
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (atovec3(rt->line, &i, &tri.rgb))
-		error_handle(-2, rt);
-	tri.rgb = v_div(tri.rgb, 255);
-	//have to check_range
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (check_atoi_parameter(rt->line, &i, &texture))
-		error_handle(-2, rt);
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (check_atof_parameter(rt->line, &i, &attr))
-		error_handle(-2, rt);
-
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (*(rt->line + i) != '\0')
-		error_handle(-2, rt);
-
-	if (!(p_node = triangle_node(tri, texture, attr)))
-	error_handle(-3, rt);
+	skip2(rt->line, &i, 't', 'r');
+	get_triangle(rt, &tri, &i);
+	get_material_attr(rt, &i, &material, &attr);
+	if (!(p_node = triangle_node(tri, material, attr)))
+		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_object), p_node);
 }

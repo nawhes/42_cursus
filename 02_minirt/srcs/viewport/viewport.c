@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/29 22:52:31 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/08 18:09:24 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 22:51:14 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 t_ray			viewport_get_ray(t_viewport *vp, double s, double t)
 {
 	t_vec3		dir;
-	
+
 	dir = vp->upper_left_corner;
 	dir = v_add_v(dir, v_mul(vp->horizontal, s));
 	dir = v_sub_v(dir, v_mul(vp->vertical, t));
@@ -33,12 +33,12 @@ static void		vp_set_viewport(t_viewport *vp, t_minirt *rt)
 	double		aspect_ratio;
 
 	aspect_ratio = (double)rt->r_x / (double)rt->r_y;
-	viewport[0] = 2.0 * tan(degrees_to_radians(vp->vfov) / 2);
+	viewport[0] = 2.0 * tan(degrees_to_radians(vp->vfov) / 2.0);
 	viewport[1] = viewport[0] / aspect_ratio;
 	vp->lookat = v_normalize(vp->lookat);
-	if (vp->lookat.y == 1)
+	if (vp->lookat.y == 1.0)
 		u = vec(1, 0, 0);
-	else if (vp->lookat.y == -1)
+	else if (vp->lookat.y == -1.0)
 		u = vec(-1, 0, 0);
 	else
 		u = v_cross(vec(0, 1, 0), vp->lookat);
@@ -46,8 +46,7 @@ static void		vp_set_viewport(t_viewport *vp, t_minirt *rt)
 	vp->origin = vp->lookfrom;
 	vp->horizontal = v_mul(u, viewport[0]);
 	vp->vertical = v_mul(v, viewport[1]);
-	tmp = vp->origin;
-	tmp = v_sub_v(tmp, v_div(vp->horizontal, 2));
+	tmp = v_sub_v(vp->origin, v_div(vp->horizontal, 2));
 	tmp = v_add_v(tmp, v_div(vp->vertical, 2));
 	tmp = v_sub_v(tmp, vp->lookat);
 	vp->upper_left_corner = tmp;

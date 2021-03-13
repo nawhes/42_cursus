@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 21:28:27 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/08 18:44:16 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 23:58:22 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 
 # include "libft.h"
 
-union		u_rgba
+typedef union		u_rgba
 {
 	char	rgb[3];
 	char	rgba[4];
 	int		color;
-};
+}					t_rgba;
 
 typedef struct		s_mlx
 {
@@ -79,7 +79,7 @@ typedef struct		s_record
 
 typedef struct		s_brdf
 {
-	int				texture;
+	int				material;
 	double			attr;
 	t_vec3			albedo;
 	int				front_face;
@@ -92,6 +92,22 @@ typedef struct		s_brdf
 	t_vec3			attenuation;
 	t_ray			ray;
 }					t_brdf;
+
+typedef struct		s_dot
+{
+	double			wodoth;
+	double			ndotwi;
+	double			ndotwo;
+	double			ndotwh;
+}					t_dot;
+
+typedef struct		s_direct_light
+{
+	t_record		rec;
+	t_brdf			brdf;
+	t_vec3			wi;
+	t_ray			ray;
+}					t_direct_light;
 
 typedef struct		s_viewport
 {
@@ -147,9 +163,9 @@ typedef struct		s_object
 {
 	void			*info;
 	int				type;
-	int				texture;
+	int				material;
 	double			attr;
-	int				(*hit)(struct s_object ob, t_ray r, t_record *rec, 
+	int				(*hit)(struct s_object ob, t_ray r, t_record *rec,
 						t_brdf *brdf);
 }					t_object;
 

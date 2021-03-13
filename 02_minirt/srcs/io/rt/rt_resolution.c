@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/08 18:29:18 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 18:05:58 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,18 @@ void		rt_resolution(t_minirt *rt)
 	int		i;
 
 	i = 0;
-	while (*(rt->line + i) == 'R' || ft_isspace(*(rt->line + i)))
-		i++;
+	skip1(rt->line, &i, 'R');
 	if (check_atoi_parameter(rt->line, &i, &rt->r_x))
 		error_handle(-2, rt);
-	//have to check MAX_WIDTH
-	while (ft_isspace(*(rt->line + i)))
-		i++;
+	if (check_range_int(rt->r_x, 0, INT32_MAX))
+		error_handle(-2, rt);
+	skip(rt->line, &i);
 	if (check_atoi_parameter(rt->line, &i, &rt->r_y))
 		error_handle(-2, rt);
+	if (check_range_int(rt->r_y, 0, INT32_MAX))
+		error_handle(-2, rt);
 	rt->pixel = rt->r_x * rt->r_y;
-	while (ft_isspace(*(rt->line + i)))
-		i++;
+	skip(rt->line, &i);
 	if (*(rt->line + i) != '\0')
 		error_handle(-2, rt);
 }

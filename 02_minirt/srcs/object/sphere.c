@@ -6,17 +6,17 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 22:20:39 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/06 05:13:22 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 22:30:25 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include <math.h>
 
-void		get_sphere_uv(t_vec3 p, double *u, double *v)
+void			get_sphere_uv(t_vec3 p, double *u, double *v)
 {
-	double	theta;
-	double	phi;
+	double		theta;
+	double		phi;
 
 	theta = acos(-p.y);
 	phi = atan2(-p.z, p.x) + M_PI;
@@ -24,13 +24,17 @@ void		get_sphere_uv(t_vec3 p, double *u, double *v)
 	*v = theta / M_PI;
 }
 
-static int	intersection_sp(t_ray r, t_record *rec, t_sphere info, double *t)
+static int		intersection_sp(
+		t_ray r,
+		t_record *rec,
+		t_sphere info,
+		double *t)
 {
-	t_vec3	oc;
-	double	a;
-	double	half_b;
-	double	c;
-	double	discriminant;
+	t_vec3		oc;
+	double		a;
+	double		half_b;
+	double		c;
+	double		discriminant;
 
 	oc = v_sub_v(r.orig, info.coord);
 	a = v_length_sq(r.dir);
@@ -50,24 +54,24 @@ static int	intersection_sp(t_ray r, t_record *rec, t_sphere info, double *t)
 	return (1);
 }
 
-
-int			sphere_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
+int				sphere_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 {
-	t_sphere	info = *(t_sphere *)ob.info;
-	double	t;
-	t_vec3	outward_normal;
+	t_sphere	info;
+	double		t;
+	t_vec3		outward_normal;
 
+	info = *(t_sphere *)ob.info;
 	if (!intersection_sp(r, rec, info, &t))
 		return (0);
 	rec->t_max = t;
 	outward_normal = v_div(v_sub_v(ray_at(r, t), info.coord), info.radius);
 	get_sphere_uv(outward_normal, &rec->u, &rec->v);
 	set_brdf(brdf, ob, r, outward_normal);
-	set_brdf2(brdf, ray_at(r, t));
+	set_brdf2(brdf, ray_at(r, t), info.rgb);
 	return (1);
 }
 
-t_sphere	*sphere(t_sphere this)
+t_sphere		*sphere(t_sphere this)
 {
 	t_sphere	*node;
 

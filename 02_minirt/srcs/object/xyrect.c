@@ -6,20 +6,21 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 22:20:39 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/02 08:08:52 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 22:34:53 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int			xyrect_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
+int				xyrect_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 {
-	t_xyrect	info = *((t_xyrect *)ob.info);
-	double	t;
-	double	x;
-	double	y;
-	t_vec3	outward_normal;
+	t_xyrect	info;
+	double		t;
+	double		x;
+	double		y;
+	t_vec3		outward_normal;
 
+	info = *(t_xyrect *)ob.info;
 	t = (info.k - r.orig.z) / r.dir.z;
 	if (t < rec->t_min || t > rec->t_max)
 		return (0);
@@ -31,15 +32,14 @@ int			xyrect_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 	rec->v = (y - info.y0) / (info.y1 - info.y0);
 	rec->t_max = t;
 	outward_normal = vec(0, 0, 1);
-
 	set_brdf(brdf, ob, r, outward_normal);
-	set_brdf2(brdf, ray_at(r, t));
+	set_brdf2(brdf, ray_at(r, t), info.rgb);
 	return (1);
 }
 
 t_xyrect		*xyrect(t_xyrect this)
 {
-	t_xyrect		*node;
+	t_xyrect	*node;
 
 	if (!(node = malloc(sizeof(t_xyrect))))
 		return (NULL);

@@ -1,51 +1,54 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   operations.c                                       :+:      :+:    :+:   */
+/*   operations2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 20:55:49 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 22:42:30 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 22:43:31 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.h"
 #include "minirt.h"
 
-t_vec3				vec(double x, double y, double z)
+t_vec3				v_add(t_vec3 a, double b)
 {
-	t_vec3			ret;
-
-	ret.x = x;
-	ret.y = y;
-	ret.z = z;
-	return (ret);
+	a.x += b;
+	a.y += b;
+	a.z += b;
+	return (a);
 }
 
-t_vec3				vec3(double x)
+t_vec3				v_add_v(t_vec3 a, t_vec3 b)
 {
-	t_vec3			ret;
-
-	ret.x = x;
-	ret.y = x;
-	ret.z = x;
-	return (ret);
+	a.x += b.x;
+	a.y += b.y;
+	a.z += b.z;
+	return (a);
 }
 
-t_vec3				v_normalize(t_vec3 v)
+t_vec3				v_sub(t_vec3 a, double b)
 {
-	double			length;
-
-	length = v_length(v);
-	v = v_div(v, length);
-	return (v);
+	a.x -= b;
+	a.y -= b;
+	a.z -= b;
+	return (a);
 }
 
-int					v_near_zero(t_vec3 vec)
+t_vec3				v_sub_v(t_vec3 a, t_vec3 b)
 {
-	double			e;
+	a.x -= b.x;
+	a.y -= b.y;
+	a.z -= b.z;
+	return (a);
+}
 
-	e = 1e-8;
-	return ((fabs(vec.x) < e) && (fabs(vec.y) < e) && (fabs(vec.z) < e));
+t_vec3				v_mul(t_vec3 a, double b)
+{
+	a.x *= b;
+	a.y *= b;
+	a.z *= b;
+	return (a);
 }

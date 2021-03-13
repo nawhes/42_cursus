@@ -1,31 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   atovec3.c                                          :+:      :+:    :+:   */
+/*   check_range.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/30 04:42:03 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 18:11:16 by sehpark          ###   ########.fr       */
+/*   Created: 2021/03/11 19:57:03 by sehpark           #+#    #+#             */
+/*   Updated: 2021/03/11 19:59:29 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int			atovec3(char *line, int *i, t_vec3 *target)
+int			check_range_int(int a, int min, int max)
 {
-	double	x;
-	double	y;
-	double	z;
+	if (a < min || a > max)
+		return (-1);
+	return (0);
+}
 
-	if (check_atof_parameter(line, i, &x))
+int			check_range_double(double a, double min, double max)
+{
+	if (a < min || a > max)
 		return (-1);
-	skip1(line, i, ',');
-	if (check_atof_parameter(line, i, &y))
+	return (0);
+}
+
+int			check_range_vec3(t_vec3 a, double min, double max)
+{
+	if (a.x < min || a.x > max)
 		return (-1);
-	skip1(line, i, ',');
-	if (check_atof_parameter(line, i, &z))
+	if (a.y < min || a.y > max)
 		return (-1);
-	*target = vec(x, y, z);
+	if (a.z < min || a.z > max)
+		return (-1);
 	return (0);
 }

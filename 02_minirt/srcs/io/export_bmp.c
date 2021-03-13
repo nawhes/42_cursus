@@ -6,29 +6,29 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 11:41:20 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/08 18:53:17 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 20:01:31 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static int	get_bmp_file(const char *filename)
+static int		get_bmp_file(const char *filename)
 {
-	int		fd;
-	char	*bmp_name;
+	int			fd;
+	char		*bmp_name;
 
 	if (ft_strrchr(filename, '/'))
 	{
 		filename = ft_strrchr(filename, '/');
 		filename++;
 	}
-	if (!(bmp_name = malloc(sizeof(char) * (ft_strlen(filename) + 
+	if (!(bmp_name = malloc(sizeof(char) * (ft_strlen(filename) +
 						ft_strlen(OUTPUT_DIR) + 5))))
 		return (-1);
 	ft_strcpy(bmp_name, OUTPUT_DIR);
 	ft_strcat(bmp_name, filename);
 	ft_strcat(bmp_name, ".bmp");
-	if (!(fd = open(bmp_name, O_WRONLY | O_CREAT | O_TRUNC, 
+	if (!(fd = open(bmp_name, O_WRONLY | O_CREAT | O_TRUNC,
 					S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)))
 		return (-1);
 	free(bmp_name);
@@ -37,7 +37,7 @@ static int	get_bmp_file(const char *filename)
 
 static t_bmp	get_header(t_minirt *rt)
 {
-	t_bmp	header;
+	t_bmp		header;
 
 	header.bf_type[0] = 'B';
 	header.bf_type[1] = 'M';
@@ -60,12 +60,12 @@ static t_bmp	get_header(t_minirt *rt)
 
 static char		*get_body(t_image *p_image, t_minirt *rt)
 {
-	int				i;
-	char			*body;
-	union u_rgba	rgba;
+	int			i;
+	char		*body;
+	t_rgba		rgba;
 
 	if (!(body = malloc(sizeof(char) * (rt->pixel * PIXEL_PER_BYTE))))
-		return (NULL);
+		error_handle(-3, rt);
 	i = 0;
 	while (i < rt->pixel)
 	{
@@ -81,10 +81,10 @@ static char		*get_body(t_image *p_image, t_minirt *rt)
 
 void			export_bmp(const char *filename, t_minirt *rt)
 {
-	int		fd;
-	t_bmp	header;
-	t_image	*p_image;
-	char	*body;
+	int			fd;
+	t_bmp		header;
+	t_image		*p_image;
+	char		*body;
 
 	if (!(fd = get_bmp_file(filename)))
 		error_handle(-1, rt);

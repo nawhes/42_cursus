@@ -6,20 +6,21 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 22:20:39 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/02 08:09:05 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 22:37:01 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int			xzrect_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
+int				xzrect_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 {
-	t_xzrect	info = *((t_xzrect *)ob.info);
-	double	t;
-	double	x;
-	double	z;
-	t_vec3	outward_normal;
+	t_xzrect	info;
+	double		t;
+	double		x;
+	double		z;
+	t_vec3		outward_normal;
 
+	info = *(t_xzrect *)ob.info;
 	t = (info.k - r.orig.y) / r.dir.y;
 	if (t < rec->t_min || t > rec->t_max)
 		return (0);
@@ -31,9 +32,8 @@ int			xzrect_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 	rec->v = (z - info.z0) / (info.z1 - info.z0);
 	rec->t_max = t;
 	outward_normal = vec(0, 1, 0);
-	
 	set_brdf(brdf, ob, r, outward_normal);
-	set_brdf2(brdf, ray_at(r, t));
+	set_brdf2(brdf, ray_at(r, t), info.rgb);
 	return (1);
 }
 

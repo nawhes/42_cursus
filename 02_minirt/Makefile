@@ -6,7 +6,7 @@
 #    By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/01 05:08:59 by sehpark           #+#    #+#              #
-#    Updated: 2021/03/11 15:31:13 by sehpark          ###   ########.fr        #
+#    Updated: 2021/03/11 22:45:42 by sehpark          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,8 +61,14 @@ SRCS	= minirt.c \
 		  io/tools/atovec3.c \
 		  io/tools/check_atof_parameter.c \
 		  io/tools/check_atoi_parameter.c \
-		  io/tools/next.c \
+		  io/tools/check_range.c \
+		  io/tools/skip.c \
+		  io/tools/get_material_attr.c \
+		  vector/operation_random.c \
 		  vector/operations.c \
+		  vector/operations2.c \
+		  vector/operations3.c \
+		  vector/operations4.c \
 		  viewport/viewport.c \
 		  object/object.c \
 		  object/cylinder.c \
@@ -81,8 +87,10 @@ SRCS	= minirt.c \
 		  tools/clamp.c \
 		  tools/degrees_to_radians.c \
 		  brdf/onb.c \
+		  brdf/fresnel.c \
 		  brdf/light_pdf.c \
 		  brdf/operation.c \
+		  brdf/operation2.c \
 		  brdf/set_brdf.c \
 		  brdf/record.c \
 		  brdf/check_box.c \
@@ -90,6 +98,8 @@ SRCS	= minirt.c \
 		  brdf/lambertian.c \
 		  brdf/mirror.c \
 		  brdf/microfacet.c \
+		  brdf/microfacet_eval.c \
+		  brdf/microfacet_function.c \
 		  trace/trace.c \
 		  trace/ray.c \
 

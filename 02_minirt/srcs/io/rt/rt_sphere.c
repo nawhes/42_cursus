@@ -6,13 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/06 05:12:19 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 19:52:41 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static t_list	*sphere_node(t_sphere sp, int texture, double attr)
+static t_list	*sphere_node(t_sphere sp, int material, double attr)
 {
 	t_sphere	*p_sp;
 	t_object	*p_ob;
@@ -20,7 +20,7 @@ static t_list	*sphere_node(t_sphere sp, int texture, double attr)
 
 	if (!(p_sp = sphere(sp)))
 		return (NULL);
-	if (!(p_ob = object((void *)p_sp, OB_SPHERE, texture, attr)))
+	if (!(p_ob = object((void *)p_sp, OB_SPHERE, material, attr)))
 	{
 		free(p_sp);
 		return (NULL);
@@ -34,46 +34,38 @@ static t_list	*sphere_node(t_sphere sp, int texture, double attr)
 	return (p_node);
 }
 
-void		rt_sphere(t_minirt *rt)
+static void		get_sphere(t_minirt *rt, t_sphere *sp, int *i)
+{
+	if (atovec3(rt->line, i, &sp->coord))
+		error_handle(-2, rt);
+	skip(rt->line, i);
+	if (check_atof_parameter(rt->line, i, &sp->radius))
+		error_handle(-2, rt);
+	if (check_range_double(sp->radius, 0.001, INFINITY))
+		error_handle(-2, rt);
+	sp->radius = sp->radius / 2;
+	skip(rt->line, i);
+	if (atovec3(rt->line, i, &sp->rgb))
+		error_handle(-2, rt);
+	if (check_range_vec3(sp->rgb, 0, 255))
+		error_handle(-2, rt);
+	sp->rgb = v_div(sp->rgb, 255);
+	skip(rt->line, i);
+}
+
+void			rt_sphere(t_minirt *rt)
 {
 	int			i;
 	t_sphere	sp;
-	int			texture;
+	int			material;
 	double		attr;
 	t_list		*p_node;
 
 	i = 0;
-	while (*(rt->line + i) == 's' || *(rt->line + i) == 'p' || ft_isspace(*(rt->line + i)))
-		i++;
-	if (atovec3(rt->line, &i, &sp.coord))
-		error_handle(-2, rt);
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (check_atof_parameter(rt->line, &i, &sp.radius))
-		error_handle(-2, rt);
-	sp.radius = sp.radius / 2;
-	//have to check_range
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (atovec3(rt->line, &i, &sp.rgb))
-		error_handle(-2, rt);
-	sp.rgb = v_div(sp.rgb, 255);
-	//have to check_range
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (check_atoi_parameter(rt->line, &i, &texture))
-		error_handle(-2, rt);
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (check_atof_parameter(rt->line, &i, &attr))
-		error_handle(-2, rt);
-
-	while (ft_isspace(*(rt->line + i)))
-		i++;
-	if (*(rt->line + i) != '\0')
-		error_handle(-2, rt);
-
-	if (!(p_node = sphere_node(sp, texture, attr)))
+	skip2(rt->line, &i, 's', 'p');
+	get_sphere(rt, &sp, &i);
+	get_material_attr(rt, &i, &material, &attr);
+	if (!(p_node = sphere_node(sp, material, attr)))
 		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_object), p_node);
 }

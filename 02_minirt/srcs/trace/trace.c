@@ -6,17 +6,21 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 08:34:40 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/02 08:47:39 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 23:57:40 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static int	intersection(t_ray r, t_list *p, t_record *rec, t_brdf *brdf)
+static int			intersection(
+		t_ray r,
+		t_list *p,
+		t_record *rec,
+		t_brdf *brdf)
 {
-	int			handler;
-	t_list		*p_ob;
-	t_object	*node;
+	int				handler;
+	t_list			*p_ob;
+	t_object		*node;
 
 	handler = 0;
 	p_ob = p;
@@ -25,7 +29,7 @@ static int	intersection(t_ray r, t_list *p, t_record *rec, t_brdf *brdf)
 		node = (t_object *)p_ob->content;
 		if (node->hit(*node, r, rec, brdf))
 		{
-			if (node->texture == TRANSPARENT)
+			if (node->material == TRANSPARENT)
 			{
 				transparent(brdf);
 				r = brdf->ray;
@@ -38,82 +42,91 @@ static int	intersection(t_ray r, t_list *p, t_record *rec, t_brdf *brdf)
 	return (handler);
 }
 
-t_vec3		direct_light(t_minirt *rt, t_brdf *brdf)
+static t_vec3		measure_light(t_brdf *brdf, t_object *p_ob, t_vec3 wi)
 {
-	t_list			*p_light = rt->p_light;
+	t_vec3			li;
+	double			pdf;
+	t_vec3			tmp;
+
+	li = v_mul(((t_sphere *)p_ob->info)->rgb, p_ob->attr);
+	pdf = light_pdf(p_ob, ray(brdf->point, wi));
+	li = v_div(li, pdf);
+	if (brdf->material == LAMBERTIAN || brdf->material == CHECK_BOX)
+		tmp = lambert_eval(*brdf, wi);
+	else
+		tmp = microfacet_eval(*brdf, wi);
+	li = v_mul_v(li, tmp);
+	return (li);
+}
+
+t_vec3				direct_light(t_minirt *rt, t_brdf *brdf)
+{
+	t_list			*p_light;
+	t_vec3			color;
+	t_vec3			li;
 	t_object		*p_ob;
-	t_vec3			color = vec3(0);
-	t_brdf			empty_brdf;
+	t_direct_light	dl;
+
+	color = vec3(0);
+	p_light = rt->p_light;
 	while (p_light)
 	{
-		t_record	rec = record();
 		p_ob = (t_object *)p_light->content;
-		t_vec3	wi = sphere_random((t_sphere *)p_ob->info, brdf->point);
-		t_ray	tmp_ray = ray(brdf->point, wi);
-		p_ob->hit(*(p_ob), tmp_ray, &rec, &empty_brdf);
-		if (intersection(tmp_ray, rt->p_object, &rec, &empty_brdf))
+		dl.rec = record();
+		dl.wi = sphere_random(p_ob->info, brdf->point);
+		dl.ray = ray(brdf->point, dl.wi);
+		sphere_hit(*(p_ob), dl.ray, &dl.rec, &dl.brdf);
+		if (!intersection(dl.ray, rt->p_object, &dl.rec, &dl.brdf))
 		{
-			p_light = p_light->next;
-			continue;
+			li = measure_light(brdf, (t_object *)p_light->content, dl.wi);
+			color = v_add_v(color, li);
 		}
-		t_vec3	li = v_mul(((t_sphere *)p_ob->info)->rgb, p_ob->attr);
-		double	pdf = light_pdf(p_ob, tmp_ray);
-		li = v_div(li, pdf);
-		t_vec3	tmp;
-		if (brdf->texture == LAMBERTIAN || brdf->texture == CHECK_BOX)
-			tmp = lambert_eval(*brdf, wi);
-		else
-			tmp = microfacet_eval(*brdf, wi);
-		li = v_mul_v(li, tmp);
-		color = v_add_v(color, li);
 		p_light = p_light->next;
+		continue;
 	}
 	return (color);
 }
 
-t_vec3		trace(t_ray r, t_minirt *rt, int depth)
+static t_vec3		brdf_sample_eval(t_minirt *rt, t_brdf *brdf)
 {
+	t_vec3			color;
+
+	color = vec3(0);
+	if (brdf->material == LAMBERTIAN)
+	{
+		lambertian(brdf);
+		color = direct_light(rt, brdf);
+	}
+	if (brdf->material == MICROFACET_NON_METAL ||
+			brdf->material == MICROFACET_METAL)
+	{
+		microfacet(brdf);
+		color = direct_light(rt, brdf);
+	}
+	if (brdf->material == MIRROR)
+		mirror(brdf);
+	if (brdf->material == TRANSPARENT)
+		transparent(brdf);
+	if (brdf->material == CHECK_BOX)
+	{
+		check_box(brdf);
+		color = direct_light(rt, brdf);
+	}
+	return (color);
+}
+
+t_vec3				trace(t_ray r, t_minirt *rt, int depth)
+{
+	t_brdf			brdf;
+	t_record		rec;
+	t_vec3			color;
+
 	if (depth <= 0)
 		return (rt->ambient_rgb);
-
-	t_brdf	brdf;
-	t_record	rec;
 	rec = record();
-
 	if (!intersection(r, rt->p_object, &rec, &brdf))
 		return (rt->ambient_rgb);
-
-	if (brdf.texture == LAMBERTIAN)
-	{
-		lambertian(&brdf);
-		t_vec3	color = direct_light(rt, &brdf);
-
-		return (v_add_v(color, v_mul_v(trace(brdf.ray, rt, depth - 1), brdf.attenuation)));
-	}
-	if (brdf.texture == MICROFACET_NON_METAL || brdf.texture == MICROFACET_METAL)
-	{
-		microfacet(&brdf);
-		t_vec3	color = direct_light(rt, &brdf);
-
-		return (v_add_v(color, v_mul_v(trace(brdf.ray, rt, depth - 1), brdf.attenuation)));
-	}
-	if (brdf.texture == MIRROR)
-	{
-		mirror(&brdf);
-		return (v_mul_v(trace(brdf.ray, rt, depth - 1), brdf.attenuation));
-	}
-	if (brdf.texture == TRANSPARENT)
-	{
-		transparent(&brdf);
-		return (v_mul_v(trace(brdf.ray, rt, depth - 1), brdf.attenuation));
-	}
-	if (brdf.texture == CHECK_BOX)
-	{
-		check_box(&brdf);
-		t_vec3	color = direct_light(rt, &brdf);
-
-		return (v_add_v(color, v_mul_v(trace(brdf.ray, rt, depth - 1), brdf.attenuation)));
-	}
-	return (vec3(0));
-
+	color = brdf_sample_eval(rt, &brdf);
+	return (v_add_v(color,
+				v_mul_v(trace(brdf.ray, rt, depth - 1), brdf.attenuation)));
 }

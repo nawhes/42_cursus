@@ -1,51 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   operations.c                                       :+:      :+:    :+:   */
+/*   operations3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 20:55:49 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 22:42:30 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 22:44:39 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.h"
 #include "minirt.h"
 
-t_vec3				vec(double x, double y, double z)
+t_vec3				v_mul_v(t_vec3 a, t_vec3 b)
 {
-	t_vec3			ret;
-
-	ret.x = x;
-	ret.y = y;
-	ret.z = z;
-	return (ret);
+	a.x *= b.x;
+	a.y *= b.y;
+	a.z *= b.z;
+	return (a);
 }
 
-t_vec3				vec3(double x)
+t_vec3				v_div(t_vec3 a, double b)
 {
-	t_vec3			ret;
-
-	ret.x = x;
-	ret.y = x;
-	ret.z = x;
-	return (ret);
+	a.x /= b;
+	a.y /= b;
+	a.z /= b;
+	return (a);
 }
 
-t_vec3				v_normalize(t_vec3 v)
+t_vec3				v_div_v(t_vec3 a, t_vec3 b)
 {
-	double			length;
-
-	length = v_length(v);
-	v = v_div(v, length);
-	return (v);
+	a.x /= b.x;
+	a.y /= b.y;
+	a.z /= b.z;
+	return (a);
 }
 
-int					v_near_zero(t_vec3 vec)
+double				v_length_sq(t_vec3 a)
 {
-	double			e;
+	return (a.x * a.x + a.y * a.y + a.z * a.z);
+}
 
-	e = 1e-8;
-	return ((fabs(vec.x) < e) && (fabs(vec.y) < e) && (fabs(vec.z) < e));
+double				v_length(t_vec3 a)
+{
+	return (sqrt(v_length_sq(a)));
 }

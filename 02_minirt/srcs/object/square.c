@@ -6,19 +6,19 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 11:22:20 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/06 06:06:47 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 22:23:19 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static int	intersection_sq(t_vec3 center_to_p, t_square info)
+static int		intersection_sq(t_vec3 center_to_p, t_square info)
 {
-	t_onb	uvw;
-	double	costheta_width;
-	double	costheta_height;
-	double	limit_width;
-	double	limit_height;
+	t_onb		uvw;
+	double		costheta_width;
+	double		costheta_height;
+	double		limit_width;
+	double		limit_height;
 
 	uvw = onb_build_from_w(info.normal);
 	costheta_width = fabs(v_dot(uvw.u, v_normalize(center_to_p)));
@@ -32,12 +32,13 @@ static int	intersection_sq(t_vec3 center_to_p, t_square info)
 	return (1);
 }
 
-int			square_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
+int				square_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 {
-	t_square	info = *(t_square *)ob.info;
-	double	t;
-	double	ndotdir;
+	t_square	info;
+	double		t;
+	double		ndotdir;
 
+	info = *(t_square *)ob.info;
 	ndotdir = v_dot(info.normal, r.dir);
 	if (ndotdir == 0)
 		return (0);
@@ -48,7 +49,7 @@ int			square_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 		return (0);
 	rec->t_max = t;
 	set_brdf(brdf, ob, r, info.normal);
-	set_brdf2(brdf, ray_at(r, t));
+	set_brdf2(brdf, ray_at(r, t), info.rgb);
 	return (1);
 }
 

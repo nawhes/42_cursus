@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_atof_parameter.c                             :+:      :+:    :+:   */
+/*   operations4.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/30 04:42:03 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 19:56:19 by sehpark          ###   ########.fr       */
+/*   Created: 2020/12/24 20:55:49 by sehpark           #+#    #+#             */
+/*   Updated: 2021/03/11 22:47:02 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "vector.h"
+#include "minirt.h"
 
-int			check_atof_parameter(char *param, int *i, double *target)
+double				v_dot(t_vec3 a, t_vec3 b)
 {
-	if (!ft_isdigit(*(param + *i)) && *(param + *i) != '-')
-		return (-1);
-	*target = ft_atof(param + *i);
-	while (ft_isdigit(*(param + *i)) || *(param + *i) == '.' ||
-			*(param + *i) == '-')
-		(*i)++;
-	return (0);
+	return (a.x * b.x + a.y * b.y + a.z * b.z);
+}
+
+t_vec3				v_cross(t_vec3 a, t_vec3 b)
+{
+	t_vec3			ret;
+
+	ret.x = a.y * b.z - a.z * b.y;
+	ret.y = a.z * b.x - a.x * b.z;
+	ret.z = a.x * b.y - a.y * b.x;
+	return (ret);
+}
+
+t_vec3				v_inv(t_vec3 a)
+{
+	return (v_mul(a, -1));
 }

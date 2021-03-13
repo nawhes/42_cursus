@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 07:20:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/07 18:46:50 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/13 14:04:42 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,43 +33,48 @@ static void	free_light_info(void *ob)
 static void	free_image_rgb(void *img)
 {
 	t_image	*tmp;
-	
+
 	tmp = (t_image *)img;
 	free(tmp->rgba);
 	return ;
 }
 
-static void	before_exit(t_minirt *rt)
+void		before_exit(t_minirt *rt)
 {
+	if (rt->p_object)
+		ft_lstiter(rt->p_object, free_object_info);
+	if (rt->p_light)
+		ft_lstiter(rt->p_light, free_light_info);
+	if (rt->p_image)
+		ft_lstiter(rt->p_image, free_image_rgb);
 	ft_lstclear(&(rt->p_viewport), free);
-	ft_lstiter(rt->p_object, free_object_info);
 	ft_lstclear(&(rt->p_object), free);
-	ft_lstiter(rt->p_light, free_light_info);
 	ft_lstclear(&(rt->p_light), free);
-	ft_lstiter(rt->p_image, free_image_rgb);
 	ft_lstclear(&(rt->p_image), free);
-	free(rt->line);
 	free(rt->p_viewport);
 	free(rt->p_object);
 	free(rt->p_image);
+	free(rt->p_mlx);
+	free(rt->line);
 	return ;
 }
 
 void		error_handle(int handler, t_minirt *rt)
 {
+	before_exit(rt);
 	if (handler != 0)
 	{
 		if (handler == -1)
-			perror("File access");
+			perror("Error\nFile access");
 		if (handler == -2)
-			perror("Rt file property");
+			perror("Error\n(Logical) Rt file property Error");
 		if (handler == -3)
-			perror("Memory allocate");
+			perror("Error\nMemory allocate");
 		if (handler == -4)
-			perror("Output");
+			perror("Error\nMlx");
 		if (handler == -5)
-			perror("Arguments");
-		before_exit(rt);
+			perror("Error\n(Logical) Argument Error");
 		exit(1);
 	}
+	exit(0);
 }

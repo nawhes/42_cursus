@@ -6,13 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/10 03:43:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 15:32:33 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 22:21:33 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static t_minirt	minirt()
+static t_minirt	minirt(void)
 {
 	t_minirt	this;
 
@@ -20,10 +20,20 @@ static t_minirt	minirt()
 	this.p_object = NULL;
 	this.p_light = NULL;
 	this.p_image = NULL;
+	this.p_mlx = NULL;
+	this.r_x = 100;
+	this.r_y = 100;
+	this.pixel = 10000;
+	this.line = NULL;
+	this.ambient_rgb = vec3(0.1);
 	return (this);
 }
 
-static int	parse_arg(int argc, char **argv, char **filename, int *flag_save)
+static int		parse_arg(
+		int argc,
+		char **argv,
+		char **filename,
+		int *flag_save)
 {
 	if (argc == 1)
 		return (-1);
@@ -41,7 +51,7 @@ static int	parse_arg(int argc, char **argv, char **filename, int *flag_save)
 	return (0);
 }
 
-int main(int argc, char **argv)
+int				main(int argc, char **argv)
 {
 	t_minirt	rt;
 	int			flag_save;
@@ -49,17 +59,20 @@ int main(int argc, char **argv)
 
 	rt = minirt();
 	if (parse_arg(argc, argv, &filename, &flag_save))
-		return (-1);
+		error_handle(-5, &rt);
 	read_rt(filename, &rt);
+	if (rt.p_object == NULL || rt.p_viewport == NULL)
+		error_handle(-2, &rt);
 	if (flag_save)
 	{
 		render(&rt);
 		export_bmp(filename, &rt);
+		before_exit(&rt);
 	}
 	else
 	{
 		if (!(rt.p_mlx = mlx(&rt)))
-			return (-1);
+			error_handle(-3, &rt);
 		render(&rt);
 		print_window(filename, &rt);
 	}

@@ -6,18 +6,20 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 22:20:39 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/06 05:49:55 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 22:34:41 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include <math.h>
 
-int			plane_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
+int				plane_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 {
-	t_plane	info = *(t_plane *)ob.info;
-	double	t;
-	double	ndotdir;
+	t_plane		info;
+	double		t;
+	double		ndotdir;
+
+	info = *(t_plane *)ob.info;
 	ndotdir = v_dot(info.normal, r.dir);
 	if (ndotdir == 0)
 		return (0);
@@ -25,15 +27,14 @@ int			plane_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 	if (t < rec->t_min || t > rec->t_max)
 		return (0);
 	rec->t_max = t;
-
 	set_brdf(brdf, ob, r, info.normal);
-	set_brdf2(brdf, ray_at(r, t));
+	set_brdf2(brdf, ray_at(r, t), info.rgb);
 	return (1);
 }
 
-t_plane		*plane(t_plane this)
+t_plane			*plane(t_plane this)
 {
-	t_plane	*node;
+	t_plane		*node;
 
 	if (!(node = malloc(sizeof(t_plane))))
 		return (NULL);

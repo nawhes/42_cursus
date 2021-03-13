@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_atof_parameter.c                             :+:      :+:    :+:   */
+/*   get_material_attr.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/30 04:42:03 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 19:56:19 by sehpark          ###   ########.fr       */
+/*   Created: 2021/03/11 19:58:21 by sehpark           #+#    #+#             */
+/*   Updated: 2021/03/11 19:58:30 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minirt.h"
 
-int			check_atof_parameter(char *param, int *i, double *target)
+void		get_material_attr(t_minirt *rt, int *i, int *material, double *attr)
 {
-	if (!ft_isdigit(*(param + *i)) && *(param + *i) != '-')
-		return (-1);
-	*target = ft_atof(param + *i);
-	while (ft_isdigit(*(param + *i)) || *(param + *i) == '.' ||
-			*(param + *i) == '-')
-		(*i)++;
-	return (0);
+	if (check_atoi_parameter(rt->line, i, material))
+		error_handle(-2, rt);
+	if (check_range_int(*material, 1, 7))
+		error_handle(-2, rt);
+	skip(rt->line, i);
+	if (check_atof_parameter(rt->line, i, attr))
+		error_handle(-2, rt);
+	skip(rt->line, i);
+	if (*(rt->line + *i) != '\0')
+		error_handle(-2, rt);
 }

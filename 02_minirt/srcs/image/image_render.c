@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/29 23:48:59 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/08 18:17:03 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/11 16:32:37 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,11 @@ static t_list	*image_node(t_minirt *rt)
 	t_list	*p_node;
 
 	if (!(p_img = image(rt)))
-		return (NULL);
+		error_handle(-3, rt);
 	if (!(p_node = ft_lstnew((void *)p_img)))
 	{
 		free(p_img);
-		return (NULL);
+		error_handle(-3, rt);
 	}
 	return (p_node);
 }
