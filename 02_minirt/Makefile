@@ -6,7 +6,7 @@
 #    By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/01 05:08:59 by sehpark           #+#    #+#              #
-#    Updated: 2021/03/14 02:41:02 by sehpark          ###   ########.fr        #
+#    Updated: 2021/03/16 18:21:54 by sehpark          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,6 +83,7 @@ SRCS	= minirt.c \
 		  object/xzrect.c \
 		  object/yzrect.c \
 		  image/image.c \
+		  image/render.c \
 		  image/image_render.c \
 		  image/image_filter.c \
 		  tools/error_handle.c \
@@ -122,7 +123,9 @@ else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
 #linux
-LINK	+= -L minilibx-linux -lmlx -lm -lXext -lX11 -lbsd
+THREADS = $(shell nproc --all)
+CFLAGS	+= -D NUM_THREAD=$(THREADS)
+LINK	+= -L minilibx-linux -lmlx -lm -lXext -lX11 -lbsd -lpthread
 LMLX	= minilibx-linux/libmlx.a
 $(LMLX):
 	@$(MAKE) -sC minilibx-linux
@@ -130,6 +133,8 @@ $(LMLX):
     endif
     ifeq ($(UNAME_S),Darwin)
 #mac
+THREADS = $(shell sysctl -n hw.ncpu)
+CFLAGS	+= -D NUM_THREAD=$(THREADS)
 LINK	+= -L minilibx_mmx_20200219 -lmlx -framework OpenGL -framework Appkit
 LMLX	= minilibx_mms_20200219/libmlx.a
 $(LMLX):

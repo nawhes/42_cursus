@@ -6,14 +6,14 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/29 22:52:31 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 22:51:14 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/16 18:08:12 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include <math.h>
 
-t_ray			viewport_get_ray(t_viewport *vp, double s, double t)
+t_ray			get_ray(t_viewport *vp, double s, double t)
 {
 	t_vec3		dir;
 
@@ -50,7 +50,6 @@ static void		vp_set_viewport(t_viewport *vp, t_minirt *rt)
 	tmp = v_add_v(tmp, v_div(vp->vertical, 2));
 	tmp = v_sub_v(tmp, vp->lookat);
 	vp->upper_left_corner = tmp;
-	vp->get_ray = viewport_get_ray;
 }
 
 t_viewport		*viewport(t_viewport this)

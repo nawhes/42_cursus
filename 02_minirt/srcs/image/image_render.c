@@ -6,11 +6,12 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/29 23:48:59 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/13 15:20:58 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/16 18:15:39 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+#include <pthread.h>
 
 static int		correction(t_vec3 rgb)
 {
@@ -22,8 +23,6 @@ static int		correction(t_vec3 rgb)
 		rgb.y = 0.0;
 	if (rgb.z != rgb.z)
 		rgb.z = 0.0;
-	if (ANTIALIAS)
-		rgb = v_div(rgb, (double)SAMPLE_PER_PIXEL);
 	rgb.x = sqrt(rgb.x);
 	rgb.y = sqrt(rgb.y);
 	rgb.z = sqrt(rgb.z);
@@ -34,91 +33,77 @@ static int		correction(t_vec3 rgb)
 	rgba += (int)(255.0 * clamp(rgb.z, 0.0, 0.999));
 	return (rgba);
 }
-static t_vec3	antialias(t_minirt *rt, t_viewport *viewport, int i, int j)
+
+static t_vec3	render_pixel(t_minirt *rt, t_viewport *viewport, int x, int y)
 {
 	int			k;
 	double		u;
 	double		v;
-	t_ray		ray;
 	t_vec3		rgb;
 
 	k = 0;
 	rgb = vec3(0);
-	while (k < SAMPLE_PER_PIXEL)
+	if (ANTIALIAS)
 	{
-		u = ((double)i + random_double()) / (rt->r_x - 1);
-		v = ((double)j + random_double()) / (rt->r_y - 1);
-		ray = viewport->get_ray(viewport, u, v);
-		rgb = v_add_v(rgb, trace(ray, rt, MAX_DEPTH));
-		k++;
+		while (k < SAMPLE_PER_PIXEL)
+		{
+			u = ((double)x + random_double()) / (rt->r_x - 1);
+			v = ((double)y + random_double()) / (rt->r_y - 1);
+			rgb = v_add_v(rgb, trace(get_ray(viewport, u, v), rt, MAX_DEPTH));
+			k++;
+		}
+		rgb = v_div(rgb, (double)SAMPLE_PER_PIXEL);
 	}
+	else
+		rgb = trace(get_ray(viewport, (double)x, (double)y), rt, MAX_DEPTH);
 	return (rgb);
 }
 
-static void		image_render(t_minirt *rt, t_image *image, t_viewport *viewport)
+static void		*render_thread(void *param)
 {
 	int			i;
 	int			x;
 	int			y;
-	t_ray		ray;
 	t_vec3		rgb;
+	t_th_info	*th_info;
 
-	viewport->set_viewport(viewport, rt);
+	th_info = (t_th_info *)param;
+	th_info->vp->set_viewport(th_info->vp, th_info->rt);
 	i = 0;
-	while (i < rt->pixel)
+	while (i < th_info->range)
 	{
-		x = i % rt->r_x;
-		y = i / rt->r_x;
-		if (ANTIALIAS)
-			rgb = antialias(rt, viewport, x, y);
-		else
-		{
-			ray = viewport->get_ray(viewport, (double)x, (double)y);
-			rgb = trace(ray, rt, MAX_DEPTH);
-		}
-		image_filter(&rgb, i, rt->r_x, rt->r_y);
-		image->rgba[i] = correction(rgb);
-		i++;
-		if (i % rt->r_x == 0)
-			printf("\rRendering.. %d / %d", i, rt->pixel);
-	}
-}
-
-static t_list	*image_node(t_minirt *rt)
-{
-	t_image	*p_img;
-	t_list	*p_node;
-
-	if (!(p_img = image(rt)))
-		error_handle(-3, rt);
-	if (!(p_node = ft_lstnew((void *)p_img)))
-	{
-		free(p_img);
-		error_handle(-3, rt);
-	}
-	return (p_node);
-}
-
-void			render(t_minirt *rt)
-{
-	size_t		i;
-	size_t		image_size;
-	t_list		*p_image;
-	t_list		*p_viewport;
-
-	i = 0;
-	image_size = ft_lstsize(rt->p_viewport);
-	p_viewport = rt->p_viewport;
-	while (i < image_size)
-	{
-		if (!(p_image = image_node(rt)))
-			error_handle(-3, rt);
-		ft_lstadd_back(&(rt->p_image), p_image);
-		printf("\n** image rendering %lu / %zu\n", i + 1, image_size);
-		image_render(rt, p_image->content, p_viewport->content);
-		p_image = p_image->next;
-		p_viewport = p_viewport->next;
+		x = (th_info->offset + i) % th_info->rt->r_x;
+		y = (th_info->offset + i) / th_info->rt->r_x;
+		rgb = render_pixel(th_info->rt, th_info->vp, x, y);
+		image_filter(&rgb, th_info->offset + i,
+				th_info->rt->r_x, th_info->rt->r_y);
+		th_info->img->rgba[th_info->offset + i] = correction(rgb);
 		i++;
 	}
-	printf("\nRendering complete\n");
+	return (NULL);
+}
+
+void			image_render(t_minirt *rt, t_image *image, t_viewport *viewport)
+{
+	pthread_t	threads[NUM_THREAD];
+	t_th_info	th_info[NUM_THREAD];
+	int			thread;
+
+	thread = 0;
+	while (thread < NUM_THREAD)
+	{
+		th_info[thread].rt = rt;
+		th_info[thread].img = image;
+		th_info[thread].vp = viewport;
+		th_info[thread].offset = rt->pixel * (thread / (double)NUM_THREAD);
+		th_info[thread].range = rt->pixel / (double)NUM_THREAD;
+		pthread_create(&threads[thread], NULL, render_thread, &th_info[thread]);
+		thread++;
+	}
+	thread = 0;
+	while (thread < NUM_THREAD)
+	{
+		pthread_join(threads[thread], NULL);
+		thread++;
+	}
 }

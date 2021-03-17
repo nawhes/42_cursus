@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 15:16:22 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/13 15:21:29 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/16 18:10:38 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 ** Grayscale = 0.299R + 0.587G + 0.114B
 ** https://en.wikipedia.org/wiki/Grayscale
 */
+
 static void		grayscale_filter(t_vec3 *rgb)
 {
 	rgb->x = rgb->x * 0.299;

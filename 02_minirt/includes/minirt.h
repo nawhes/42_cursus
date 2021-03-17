@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 04:17:50 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/14 02:24:47 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/16 18:08:49 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,17 @@
 #  define KEY_ESCAPE			53
 # endif
 
+# ifndef NUM_THREAD
+#  define NUM_THREAD			1
+# endif
+
 /*
 ** ray trace
 */
 
 t_record	record();
 t_ray		ray(t_vec3 orig, t_vec3 dir);
+t_ray		get_ray(t_viewport *vp, double s, double t);
 t_vec3		ray_at(t_ray a, double t);
 t_vec3		trace(t_ray r, t_minirt *rt, int depth);
 
@@ -190,6 +195,7 @@ t_viewport	*viewport(t_viewport this);
 
 t_image		*image(t_minirt *rt);
 void		render(t_minirt *rt);
+void		image_render(t_minirt *rt, t_image *image, t_viewport *viewport);
 void		image_filter(t_vec3 *rgb, int i, int r_x, int r_y);
 
 /*

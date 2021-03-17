@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 21:28:27 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/14 02:28:53 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/16 18:07:48 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ typedef struct		s_viewport
 	t_vec3			horizontal;
 	t_vec3			vertical;
 	t_vec3			upper_left_corner;
-	t_ray			(*get_ray)(struct s_viewport *vp, double s, double t);
 	void			(*set_viewport)(struct s_viewport *vp, struct s_minirt *rt);
 }					t_viewport;
 
@@ -136,6 +135,15 @@ typedef struct		s_info
 	int				size_line;
 	int				endian;
 }					t_info;
+
+typedef struct		s_thread_info
+{
+	t_minirt		*rt;
+	t_image			*img;
+	t_viewport		*vp;
+	int				offset;
+	int				range;
+}					t_th_info;
 
 typedef struct		s_bmp
 {

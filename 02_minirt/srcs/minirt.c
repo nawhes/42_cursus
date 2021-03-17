@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/10 03:43:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/14 01:08:11 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/14 14:19:02 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,6 @@ int				main(int argc, char **argv)
 	int			flag_save;
 	char		*filename;
 
-	t_onb		uvw;
-	uvw = onb_build_from_w(v_normalize(vec(0.3, 0, 1)));
-	printf("(%f, %f, %f)\n", uvw.u.x, uvw.u.y, uvw.u.z);
-	printf("(%f, %f, %f)\n", uvw.v.x, uvw.v.y, uvw.v.z);
-	printf("(%f, %f, %f)\n", uvw.w.x, uvw.w.y, uvw.w.z);
 	rt = minirt();
 	if (parse_arg(argc, argv, &filename, &flag_save))
 		error_handle(-5, &rt);
