@@ -37,7 +37,7 @@ OBJS_B	= $(addprefix $(SRC), $(SRCS_B:.c=.o))
 #----------------------------------- FILES ------------------------------------#
 
 LFT		= libft/libft.a
-LINK	= -L libft -lft -L minilibx-linux -l mlx -lm -lXext -lX11 -lbsd
+LINK	= -L libft -lft
 
 SRCS	= minirt.c \
 		  io/get_next_line.c \
@@ -135,8 +135,9 @@ $(LMLX):
 #mac
 THREADS = $(shell sysctl -n hw.ncpu)
 CFLAGS	+= -D NUM_THREAD=$(THREADS)
-LINK	+= -L minilibx_mmx_20200219 -lmlx -framework OpenGL -framework Appkit
-LMLX	= minilibx_mms_20200219/libmlx.a
+LINK	+= -L minilibx_mms_20200219 -lmlx -framework OpenGL -framework AppKit
+LMLX	= minilibx_mms_20200219/libmlx.dylib
+NAME_TOOL	= install_name_tool -change libmlx.dylib $(LMLX) $(NAME)
 $(LMLX):
 	@$(MAKE) -sC minilibx_mms_20200219
 
@@ -152,6 +153,8 @@ endif
 
 $(NAME): $(LFT) $(LMLX) $(OBJS)
 	$(CC) $(CFLAGS) $(INCS) $(OBJS) $(LINK) -o $(NAME) -fsanitize=address
+	$(NAME_TOOL)
+	$(TESTT)
 
 $(LFT):
 	@$(MAKE) -sC libft
