@@ -6,12 +6,16 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/14 19:01:47 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 21:51:38 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/18 05:59:31 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include <math.h>
+
+/*
+** https://raytracing.github.io/books/RayTracingTheRestOfYourLife.html
+*/
 
 t_onb		onb_build_from_w(t_vec3 n)
 {

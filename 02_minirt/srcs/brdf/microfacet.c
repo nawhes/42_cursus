@@ -6,11 +6,15 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 21:07:34 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 22:19:38 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/18 05:58:34 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+/*
+** https://github.com/rorydriscoll/RayTracer/blob/master/Source/RayTracer/Brdf/
+*/
 
 static double	reflect_probability(t_vec3 fresnel, t_vec3 albedo)
 {

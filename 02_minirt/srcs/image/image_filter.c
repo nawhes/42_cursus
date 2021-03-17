@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 15:16:22 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/16 18:10:38 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/18 06:01:24 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 /*
 ** Grayscale = 0.299R + 0.587G + 0.114B
 ** https://en.wikipedia.org/wiki/Grayscale
+** https://www.geeksforgeeks.org/image-processing-in-java-set-3-colored-image
+** -to-greyscale-image-conversion/?ref=lbp
 */
 
 static void		grayscale_filter(t_vec3 *rgb)

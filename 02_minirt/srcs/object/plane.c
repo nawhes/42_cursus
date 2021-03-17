@@ -6,12 +6,16 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 22:20:39 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/13 21:22:07 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/18 05:57:16 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include <math.h>
+
+/*
+** http://www.illusioncatalyst.com/notes.php
+*/
 
 int				plane_hit(t_object ob, t_ray r, t_record *rec, t_brdf *brdf)
 {
