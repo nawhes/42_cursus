@@ -6,12 +6,17 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 22:20:39 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/13 21:20:20 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/18 00:20:36 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include <math.h>
+
+/*
+** https://raytracing.github.io/books/RayTracingInOneWeekend.html
+** #surfacenormalsandmultipleobjects/simplifyingtheray-sphereintersectioncode
+*/
 
 void			get_sphere_uv(t_vec3 p, double *u, double *v)
 {

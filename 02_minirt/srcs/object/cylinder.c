@@ -6,11 +6,15 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 11:22:20 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/13 21:21:26 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/18 00:17:33 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+/*
+** https://www.shadertoy.com/view/Md3cWj
+*/
 
 static int		intersection_cy3(t_cy cy, t_vec3 *normal, double *t)
 {
@@ -26,13 +30,13 @@ static int		intersection_cy3(t_cy cy, t_vec3 *normal, double *t)
 		ddotn = -ddotn;
 		odotn = -odotn;
 	}
-	front2 = (-v_length(cy.normal) - odotn) / ddotn;
+	front2 = (-cy.l - odotn) / ddotn;
 	if (front2 > cy.front)
 	{
 		cy.front = front2;
 		*normal = v_inv(cy.normal);
 	}
-	if (cy.front > cy.back || odotn + ddotn * cy.front > v_length(cy.normal))
+	if (cy.front > cy.back || odotn + ddotn * cy.front > cy.l)
 		return (0);
 	*t = cy.front;
 	return (1);
@@ -40,22 +44,20 @@ static int		intersection_cy3(t_cy cy, t_vec3 *normal, double *t)
 
 static int		intersection_cy2(t_cy cy, t_vec3 *normal, double *t)
 {
-	double		length_r;
 	double		rdotp;
 	double		pdotp;
 	double		q;
 	double		discriminant;
 
-	length_r = v_length(cy.r);
 	rdotp = v_dot(cy.r, cy.p);
 	pdotp = v_dot(cy.p, cy.p);
 	q = pdotp - rdotp * rdotp;
 	if (q >= cy.radius * cy.radius)
 		return (0);
 	discriminant = sqrt(cy.radius * cy.radius - q);
-	cy.front = (-rdotp - discriminant) / length_r;
-	cy.back = (-rdotp + discriminant) / length_r;
-	*normal = v_normalize(v_add_v(cy.p, v_mul(cy.r, cy.front * length_r)));
+	cy.front = (-rdotp - discriminant) / cy.rl;
+	cy.back = (-rdotp + discriminant) / cy.rl;
+	*normal = v_normalize(v_add_v(cy.p, v_mul(cy.r, cy.front * cy.rl)));
 	return (intersection_cy3(cy, normal, t));
 }
 
@@ -65,17 +67,20 @@ static int		intersection_cy(
 		t_vec3 *normal,
 		double *t)
 {
-	t_vec3		tmp;
+	t_vec3		mid;
 	t_cy		cy;
 
 	cy.top = v_add_v(info.coord, v_mul(info.normal, info.height));
 	cy.bottom = info.coord;
-	tmp = v_div(v_add_v(cy.top, cy.bottom), 2.0);
-	cy.o = v_sub_v(r_in.orig, tmp);
+	mid = v_div(v_add_v(cy.bottom, cy.top), 2.0);
+	cy.o = v_sub_v(r_in.orig, mid);
 	cy.d = r_in.dir;
 	cy.radius = info.radius;
-	cy.normal = info.normal;
+	cy.normal = v_div(v_sub_v(cy.bottom, cy.top), 2.0);
+	cy.l = v_length(cy.normal);
+	cy.normal = v_normalize(cy.normal);
 	cy.r = v_sub_v(cy.d, v_mul(cy.normal, v_dot(cy.d, cy.normal)));
+	cy.rl = v_length(cy.r);
 	cy.r = v_normalize(cy.r);
 	cy.p = v_sub_v(cy.o, v_mul(cy.normal, v_dot(cy.o, cy.normal)));
 	return (intersection_cy2(cy, normal, t));

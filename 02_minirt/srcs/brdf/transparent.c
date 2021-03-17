@@ -6,11 +6,15 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/16 00:23:55 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 20:06:00 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/18 04:11:52 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+/*
+** https://raytracing.github.io/books/RayTracingInOneWeekend.html#dielectrics
+*/
 
 double		ior2fresnel(double cosine, double ref_idx)
 {

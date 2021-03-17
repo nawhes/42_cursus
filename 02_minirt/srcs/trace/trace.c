@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 08:34:40 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/13 20:54:58 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/18 05:53:16 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,35 +28,43 @@ static int			intersection(
 	{
 		node = (t_object *)p_ob->content;
 		if (node->hit(*node, r, rec, brdf))
-		{
-			if (node->material == TRANSPARENT)
-			{
-				transparent(brdf);
-				r = brdf->ray;
-			}
-			else
-				handler = 1;
-		}
+			handler = 1;
 		p_ob = p_ob->next;
 	}
 	return (handler);
 }
 
-static t_vec3		measure_light(t_brdf *brdf, t_object *p_ob, t_vec3 wi)
+static int			measure_light(
+		t_object *p_light,
+		t_minirt *rt,
+		t_direct_light dl,
+		t_vec3 *li)
 {
-	t_vec3			li;
+	t_list			*p_ob;
+	t_object		*node;
 	double			pdf;
-	t_vec3			tmp;
 
-	li = v_mul(((t_sphere *)p_ob->info)->rgb, p_ob->attr);
-	pdf = light_pdf(p_ob, ray(brdf->point, wi));
-	li = v_div(li, pdf);
-	if (brdf->material == LAMBERTIAN)
-		tmp = lambert_eval(*brdf, wi);
-	else
-		tmp = microfacet_eval(*brdf, wi);
-	li = v_mul_v(li, tmp);
-	return (li);
+	p_ob = rt->p_object;
+	sphere_hit(*(p_light), dl.ray, &dl.rec, &dl.brdf);
+	while (p_ob)
+	{
+		node = (t_object *)p_ob->content;
+		if (node->hit(*node, dl.ray, &dl.rec, &dl.brdf))
+		{
+			if (dl.brdf.material != TRANSPARENT)
+				return (0);
+			transparent(&dl.brdf);
+			dl.ray = dl.brdf.ray;
+			dl.rec = record();
+			p_ob = rt->p_object;
+			sphere_hit(*(p_light), dl.ray, &dl.rec, &dl.brdf);
+			continue ;
+		}
+		p_ob = p_ob->next;
+	}
+	pdf = light_pdf(p_light, dl.ray);
+	*li = v_div(((t_sphere *)p_light->info)->rgb, pdf);
+	return (1);
 }
 
 t_vec3				direct_light(t_minirt *rt, t_brdf *brdf)
@@ -75,14 +83,15 @@ t_vec3				direct_light(t_minirt *rt, t_brdf *brdf)
 		dl.rec = record();
 		dl.wi = sphere_random(p_ob->info, brdf->point);
 		dl.ray = ray(brdf->point, dl.wi);
-		sphere_hit(*(p_ob), dl.ray, &dl.rec, &dl.brdf);
-		if (!intersection(dl.ray, rt->p_object, &dl.rec, &dl.brdf))
+		if (measure_light(p_ob, rt, dl, &li))
 		{
-			li = measure_light(brdf, (t_object *)p_light->content, dl.wi);
+			if (brdf->material == LAMBERTIAN)
+				li = v_mul_v(li, lambert_eval(*brdf, dl.wi));
+			else
+				li = v_mul_v(li, microfacet_eval(*brdf, dl.wi));
 			color = v_add_v(color, li);
 		}
 		p_light = p_light->next;
-		continue;
 	}
 	return (color);
 }

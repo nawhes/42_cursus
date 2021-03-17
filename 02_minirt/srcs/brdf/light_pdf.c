@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 05:22:17 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/11 21:31:44 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/18 05:54:39 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,7 @@ static double	get_illuminance(t_sphere *sp, t_ray r)
 double			light_pdf(t_object *p_ob, t_ray r)
 {
 	t_sphere	*sp;
-	t_record	rec;
-	t_brdf		brdf;
 
 	sp = (t_sphere *)p_ob->info;
-	rec = record();
-	if (!p_ob->hit(*p_ob, r, &rec, &brdf))
-		return (0);
 	return (get_illuminance(sp, r));
 }

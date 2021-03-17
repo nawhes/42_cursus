@@ -6,13 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/13 20:47:21 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/18 04:34:23 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static t_list	*sphere_node(t_sphere sp, double attr)
+static t_list	*sphere_node(t_sphere sp)
 {
 	t_sphere	*p_sp;
 	t_object	*p_ob;
@@ -22,7 +22,7 @@ static t_list	*sphere_node(t_sphere sp, double attr)
 	if (!(p_sp = sphere(sp)))
 		return (NULL);
 	ob_info.material = DIFFUSE_LIGHT;
-	ob_info.attr = attr;
+	ob_info.attr = 0;
 	ob_info.texture = TX_NONE;
 	if (!(p_ob = object((void *)p_sp, OB_SPHERE, ob_info)))
 	{
@@ -69,10 +69,11 @@ void			rt_light(t_minirt *rt)
 	get_sphere(rt, &sp, &i);
 	if (check_atof_parameter(rt->line, &i, &attr))
 		error_handle(-2, rt);
+	sp.rgb = v_mul(sp.rgb, attr);
 	skip(rt->line, &i);
 	if (*(rt->line + i) != '\0')
 		error_handle(-2, rt);
-	if (!(p_node = sphere_node(sp, attr)))
+	if (!(p_node = sphere_node(sp)))
 		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_light), p_node);
 }

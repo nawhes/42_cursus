@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 21:28:27 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/16 18:07:48 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/03/17 23:30:11 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,6 +263,8 @@ typedef struct		s_cy
 	t_vec3			o;
 	t_vec3			d;
 	t_vec3			normal;
+	double			l;
+	double			rl;
 	double			radius;
 	t_vec3			r;
 	t_vec3			p;
