@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 21:07:34 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/18 05:58:34 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/04/07 20:13:54 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,9 @@ static t_vec3	sample(t_brdf *brdf, t_vec3 fresnel, double prob, t_onb uvw)
 	else
 	{
 		brdf->wi = onb_local(uvw, random_cosine_direction());
-		pdf = v_div_v(v_sub_v(vec3(1), fresnel), vec3(1.0 - prob));
-		pdf = v_mul_v(pdf, brdf->albedo);
+	//	pdf = v_div_v(v_sub_v(vec3(1), fresnel), vec3(1.0 - prob));
+	//	pdf = v_mul_v(pdf, brdf->albedo);
+		pdf = lambert_eval(*brdf, brdf->wi);
 	}
 	brdf->ray = ray(brdf->point, brdf->wi);
 	return (pdf);

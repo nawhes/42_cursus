@@ -6,13 +6,13 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 04:18:25 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/18 04:34:23 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/04/07 21:56:47 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static t_list	*sphere_node(t_sphere sp)
+static t_list	*sphere_node(t_sphere sp, double attr)
 {
 	t_sphere	*p_sp;
 	t_object	*p_ob;
@@ -22,7 +22,7 @@ static t_list	*sphere_node(t_sphere sp)
 	if (!(p_sp = sphere(sp)))
 		return (NULL);
 	ob_info.material = DIFFUSE_LIGHT;
-	ob_info.attr = 0;
+	ob_info.attr = attr;
 	ob_info.texture = TX_NONE;
 	if (!(p_ob = object((void *)p_sp, OB_SPHERE, ob_info)))
 	{
@@ -73,7 +73,10 @@ void			rt_light(t_minirt *rt)
 	skip(rt->line, &i);
 	if (*(rt->line + i) != '\0')
 		error_handle(-2, rt);
-	if (!(p_node = sphere_node(sp)))
+	if (!(p_node = sphere_node(sp, attr)))
 		error_handle(-3, rt);
 	ft_lstadd_back(&(rt->p_light), p_node);
+	if (!(p_node = sphere_node(sp, attr)))
+		error_handle(-3, rt);
+	ft_lstadd_back(&(rt->p_object), p_node);
 }

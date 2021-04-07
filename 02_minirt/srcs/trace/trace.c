@@ -6,7 +6,7 @@
 /*   By: sehpark <sehpark@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 08:34:40 by sehpark           #+#    #+#             */
-/*   Updated: 2021/03/18 05:53:16 by sehpark          ###   ########.fr       */
+/*   Updated: 2021/04/08 04:12:54 by sehpark          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,17 @@ static int			measure_light(
 		node = (t_object *)p_ob->content;
 		if (node->hit(*node, dl.ray, &dl.rec, &dl.brdf))
 		{
-			if (dl.brdf.material != TRANSPARENT)
+			if (dl.brdf.material != TRANSPARENT
+					&& dl.brdf.material != DIFFUSE_LIGHT)
 				return (0);
+			/*
 			transparent(&dl.brdf);
 			dl.ray = dl.brdf.ray;
 			dl.rec = record();
 			p_ob = rt->p_object;
 			sphere_hit(*(p_light), dl.ray, &dl.rec, &dl.brdf);
 			continue ;
+			*/
 		}
 		p_ob = p_ob->next;
 	}
@@ -85,10 +88,7 @@ t_vec3				direct_light(t_minirt *rt, t_brdf *brdf)
 		dl.ray = ray(brdf->point, dl.wi);
 		if (measure_light(p_ob, rt, dl, &li))
 		{
-			if (brdf->material == LAMBERTIAN)
-				li = v_mul_v(li, lambert_eval(*brdf, dl.wi));
-			else
-				li = v_mul_v(li, microfacet_eval(*brdf, dl.wi));
+			li = v_mul_v(li, lambert_eval(*brdf, dl.wi));
 			color = v_add_v(color, li);
 		}
 		p_light = p_light->next;
@@ -126,6 +126,8 @@ t_vec3				trace(t_ray r, t_minirt *rt, int depth)
 	rec = record();
 	if (!intersection(r, rt->p_object, &rec, &brdf))
 		return (rt->ambient_rgb);
+	if (brdf.material == DIFFUSE_LIGHT)
+		return (v_div(brdf.albedo, brdf.attr));
 	color = brdf_sample_eval(rt, &brdf);
 	return (v_add_v(color,
 				v_mul_v(trace(brdf.ray, rt, depth - 1), brdf.attenuation)));
